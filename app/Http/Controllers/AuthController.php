@@ -3,6 +3,10 @@ namespace App\Http\Controllers;
 
 use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Mail;
+use App\Mail\Authenticate;
+use Illuminate\Support\Str;
+use Illuminate\Http\Request;
 
 class AuthController extends Controller
 {
@@ -13,7 +17,7 @@ class AuthController extends Controller
      */
     public function __construct()
     {
-        $this->middleware('auth:api', ['except' => ['login']]);
+        $this->middleware('auth:api', ['except' => ['login', 'authenticate']]);
     }
 
     /**
@@ -62,6 +66,24 @@ class AuthController extends Controller
     public function refresh()
     {
         return $this->respondWithToken(auth()->refresh());
+    }
+
+    public function authenticate(Request $request)
+    {
+        $code = Str::random(6);
+        $email = $request->input('email');
+    
+        try {
+            Mail::to($email)->send(new Authenticate($code));
+            return response()->json(['message' => 'Mail sent successfully', 'code' => $code]);
+        } catch (\Exception $e) {
+            return response()->json(['email' => $email, 'message' => 'Failed to send mail', 'error' => $e->getMessage()], 500);
+        }
+    }
+
+    public function verificar()
+    {
+        return response()->json(['message' => 'Verificado']);
     }
 
     /**

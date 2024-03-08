@@ -1,0 +1,1 @@
+<p>Your authentication code is: {{ $code }}</p>
