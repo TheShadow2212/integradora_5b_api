@@ -16,7 +16,8 @@ use App\Http\Controllers\UserController;
 |
 */
 
-Route::post('user/register', [UserController::class, 'create']);   
+Route::post('user/register', [UserController::class, 'create']); 
+Route::get('/verify-email/{id}', [AuthController::class, 'verifyEmail'])->name('verification.email');
 Route::post('autenticar', [AuthController::class, 'authenticate']);
 
 

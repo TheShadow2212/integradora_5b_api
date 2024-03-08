@@ -7,6 +7,7 @@ use Illuminate\Support\Facades\Mail;
 use App\Mail\Authenticate;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
+use App\Models\User;
 
 class AuthController extends Controller
 {
@@ -17,7 +18,20 @@ class AuthController extends Controller
      */
     public function __construct()
     {
-        $this->middleware('auth:api', ['except' => ['login', 'authenticate']]);
+        $this->middleware('auth:api', ['except' => ['login', 'authenticate', 'verifyEmail']]);
+    }
+
+    public function verifyEmail(Request $request, $id) 
+    {
+        if (! $request->hasValidSignature()) {
+            abort(401);
+        }
+    
+        $user = User::findOrFail($id);
+        $user->email_verified_at = now();
+        $user->save();
+    
+        return response()->json(['message' => 'Email verified!']);
     }
 
     /**
@@ -31,6 +45,11 @@ class AuthController extends Controller
 
         if (! $token = auth()->attempt($credentials)) {
             return response()->json(['error' => 'Unauthorized'], 401);
+        }
+
+        $user = auth()->user();
+        if ($user->email_verified_at === null) {
+            return response()->json(['error' => 'Email not verified'], 401);
         }
 
         return $this->respondWithToken($token);
@@ -98,7 +117,7 @@ class AuthController extends Controller
         return response()->json([
             'access_token' => $token,
             'token_type' => 'bearer',
-            'expires_in' => auth()->factory()->getTTL() * 60
+            'expires_in' => auth()->factory()->getTTL() * 60,
         ]);
     }
 }
