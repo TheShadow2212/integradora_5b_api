@@ -29,9 +29,10 @@ class AuthController extends Controller
     
         $user = User::findOrFail($id);
         $user->email_verified_at = now();
+        $user->role_id = 2;
         $user->save();
     
-        return response()->json(['message' => 'Email verified!']);
+        return view('emailVerified');
     }
 
     /**
@@ -45,11 +46,6 @@ class AuthController extends Controller
 
         if (! $token = auth()->attempt($credentials)) {
             return response()->json(['error' => 'Unauthorized'], 401);
-        }
-
-        $user = auth()->user();
-        if ($user->email_verified_at === null) {
-            return response()->json(['error' => 'Email not verified'], 401);
         }
 
         return $this->respondWithToken($token);
@@ -114,10 +110,12 @@ class AuthController extends Controller
      */
     protected function respondWithToken($token)
     {
+        $user = auth()->user();
         return response()->json([
             'access_token' => $token,
             'token_type' => 'bearer',
             'expires_in' => auth()->factory()->getTTL() * 60,
+            'role_id' => $user->role_id,
         ]);
     }
 }
