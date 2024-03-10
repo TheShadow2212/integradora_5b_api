@@ -4,6 +4,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\UserController;
+use App\Http\Controllers\PaisController;
 
 /*
 |--------------------------------------------------------------------------
@@ -27,6 +28,13 @@ Route::prefix('auth')->middleware(['api'])->group(function () {
     Route::post('me', [AuthController::class, 'me']);
     Route::post('refresh', [AuthController::class, 'refresh']);
     Route::get('verificar', [AuthController::class, 'verificar']);
+    
+    //Rutas para el recurso pais - CRUD
+    Route::get('paises', [PaisController::class, 'index']);
+    Route::get('paises/{id}', [PaisController::class, 'show']);
+    Route::post('paises', [PaisController::class, 'create']);
+    Route::put('paises/{id}', [PaisController::class, 'update']);
+    Route::delete('paises/{id}', [PaisController::class, 'delete']);
 });
 
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
