@@ -11,7 +11,7 @@ class Apartamento extends Model
 
     protected $table = 'apartamentos';
     protected $primaryKey = 'ApartamentoID';
-    protected $fillable = ['Nombre', 'EdificioID'];
+    protected $fillable = ['Nombre', 'EdificioID', 'Descripcion', 'Estado'];
 
     public function edificio()
     {

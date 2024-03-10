@@ -15,6 +15,7 @@ return new class extends Migration
             $table->id('InquilinoID');
             $table->string('Nombre', 50);
             $table->string('Apellido', 50);
+            $table->string('Cedula', 13);
             $table->string('Telefono', 50);
             $table->string('Email', 50);
             $table->timestamps();

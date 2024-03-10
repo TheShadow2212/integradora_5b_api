@@ -11,7 +11,7 @@ class Inquilino extends Model
 
     protected $table = 'inquilinos';
     protected $primaryKey = 'InquilinoID';
-    protected $fillable = ['Nombre', 'Telefono'];
+    protected $fillable = ['Nombre', 'Apellido','Cedula','Telefono','Email'];
 
     public function contratosAlquiler()
     {

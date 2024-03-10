@@ -15,6 +15,8 @@ return new class extends Migration
             $table->id('ApartamentoID');
             $table->string('Nombre', 50);
             $table->foreignId('EdificioID')->constrained('edificios', 'EdificioID');
+            $table->string('Descripcion', 255);
+            $table->integer('Estado');
             $table->timestamps();
         });
     }
