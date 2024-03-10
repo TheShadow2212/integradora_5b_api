@@ -11,11 +11,10 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('clientes', function (Blueprint $table) {
-            $table->id('ClienteID');
-            $table->string('Nombre');
-            $table->string('Direccion');
-            $table->string('Telefono');
+        Schema::create('distritos', function (Blueprint $table) {
+            $table->id('DistritoID');
+            $table->string('Nombre', 50);
+            $table->foreignId('CiudadID')->constrained('ciudades', 'CiudadID');
             $table->timestamps();
         });
     }
@@ -25,6 +24,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('clientes');
+        Schema::dropIfExists('distritos');
     }
 };
