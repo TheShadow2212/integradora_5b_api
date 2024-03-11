@@ -41,7 +41,7 @@ Route::prefix('auth')->group (function () {
 //Cambiar y quitar algunas rutas para que jale el middleware
 Route::prefix('auth')->middleware(['jwtAuth', 'roleAuth'])->group(function () {
     //Rutas para el recurso pais - CRUD
-    Route::get('paises', [PaisController::class, 'index']);
+    Route::get('paises', [PaisController::class, 'index'])->middleware('userAuth:1,2');
     Route::get('paises/{id}', [PaisController::class, 'show']);
     Route::post('paises', [PaisController::class, 'create']);
     Route::put('paises/{id}', [PaisController::class, 'update']);
