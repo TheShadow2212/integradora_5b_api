@@ -10,7 +10,14 @@ class PaisController extends Controller
 {
     public function index()
     {
-        return Pais::all();
+        $paises = Pais::all()->map(function ($paises) {
+            return [
+                'id' => $paises -> PaisID,
+                'Nombre' =>$paises -> Nombre
+            ];
+        });
+
+        return response()->json($paises);
     }
 
     public function show($id)

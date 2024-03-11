@@ -30,7 +30,7 @@ Route::post('user/register', [UserController::class, 'create']);
 Route::get('/verify-email/{id}', [AuthController::class, 'verifyEmail'])->name('verification.email');
 Route::post('autenticar', [AuthController::class, 'authenticate']);
 
-
+//Cambiar y quitar algunas rutas para que jale el middleware
 Route::prefix('auth')->middleware(['api'])->group(function () {
     Route::post('login', [AuthController::class, 'login']);
     Route::post('logout', [AuthController::class, 'logout']);
