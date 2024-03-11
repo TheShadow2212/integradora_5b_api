@@ -10,7 +10,15 @@ class RegionController extends Controller
 {
     public function index()
     {
-        return Region::all();
+        $regiones = Region::all()->map(function ($regiones) {
+            return [
+                'id' => $regiones -> RegionID,
+                'Nombre' =>$regiones -> Nombre,
+                'PaisID' =>$regiones -> PaisID
+            ];
+        });
+
+        return response()->json($regiones);
     }
 
     public function show($id)

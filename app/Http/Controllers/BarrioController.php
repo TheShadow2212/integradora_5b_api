@@ -10,7 +10,15 @@ class BarrioController extends Controller
 {
     public function index()
     {
-        return Barrio::all();
+        $barrios = Barrio::all()->map(function ($barrios) {
+            return [
+                'id' => $barrios -> BarrioID,
+                'Nombre' =>$barrios -> Nombre,
+                'DistritoID' =>$barrios -> DistritoID
+            ];
+        });
+
+        return response()->json($barrios);
     }
 
     public function show($id)

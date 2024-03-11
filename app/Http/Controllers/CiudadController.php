@@ -10,7 +10,15 @@ class CiudadController extends Controller
 {
     public function index()
     {
-        return Ciudad::all();
+        $ciudades = Ciudad::all()->map(function ($ciudades) {
+            return [
+                'id' => $ciudades -> CiudadID,
+                'Nombre' =>$ciudades -> Nombre,
+                'RegionID' =>$ciudades -> RegionID
+            ];
+        });
+
+        return response()->json($ciudades);
     }
 
     public function show($id)

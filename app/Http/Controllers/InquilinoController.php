@@ -10,7 +10,18 @@ class InquilinoController extends Controller
 {
     public function index()
     {
-        return Inquilino::all();
+        $inquilinos = Inquilino::all()->map(function ($inquilinos) {
+            return [
+                'id' => $inquilinos -> InquilinoID,
+                'Nombre' =>$inquilinos -> Nombre,
+                'Apellido' =>$inquilinos -> Apellido,
+                'Cedula' =>$inquilinos -> Cedula,
+                'Telefono' =>$inquilinos -> Telefono,
+                'Email' =>$inquilinos -> Email
+            ];
+        });
+
+        return response()->json($inquilinos);
     }
 
     public function show($id)

@@ -10,7 +10,18 @@ class ContratoAlquilerController extends Controller
 {
     public function index()
     {
-        return ContratoAlquiler::all();
+        $contratoAlquiler = ContratoAlquiler::all()->map(function ($contratoAlquiler) {
+            return [
+                'id' => $contratoAlquiler -> ContratoAlquilerID,
+                'FechaInicio' =>$contratoAlquiler -> FechaInicio,
+                'FechaFin' =>$contratoAlquiler -> FechaFin,
+                'Monto' =>$contratoAlquiler -> Monto,
+                'InquilinoID' =>$contratoAlquiler -> InquilinoID,
+                'ApartamentoID' =>$contratoAlquiler -> ApartamentoID
+            ];
+        });
+
+        return response()->json($contratoAlquiler);
     }
 
     public function show($id)

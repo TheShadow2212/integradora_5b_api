@@ -10,7 +10,15 @@ class DistritoController extends Controller
 {
     public function index()
     {
-        return Distrito::all();
+        $distritos = Distrito::all()->map(function ($distritos) {
+            return [
+                'id' => $distritos -> DistritoID,
+                'Nombre' =>$distritos -> Nombre,
+                'CiudadID' =>$distritos -> CiudadID
+            ];
+        });
+
+        return response()->json($distritos);
     }
 
     public function show($id)

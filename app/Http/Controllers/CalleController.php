@@ -10,7 +10,15 @@ class CalleController extends Controller
 {
     public function index()
     {
-        return Calle::all();
+        $calles = Calle::all()->map(function ($calles) {
+            return [
+                'id' => $calles -> CalleID,
+                'Nombre' =>$calles -> Nombre,
+                'BarrioID' =>$calles -> BarrioID
+            ];
+        });
+
+        return response()->json($calles);
     }
 
     public function show($id)

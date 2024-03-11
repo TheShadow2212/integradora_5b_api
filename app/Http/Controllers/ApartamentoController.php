@@ -10,7 +10,17 @@ class ApartamentoController extends Controller
 {
     public function index()
     {
-        return Apartamento::all();
+        $apartamentos = Apartamento::all()->map(function ($apartamentos) {
+            return [
+                'id' => $apartamentos -> ApartamentoID,
+                'Nombre' =>$apartamentos -> Nombre,
+                'EdificioID' =>$apartamentos -> EdificioID,
+                'Descripcion' =>$apartamentos -> Descripcion,
+                'Estado' =>$apartamentos -> Estado
+            ];
+        });
+
+        return response()->json($apartamentos);
     }
 
     public function show($id)

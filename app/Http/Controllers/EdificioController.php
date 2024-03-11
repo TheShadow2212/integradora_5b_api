@@ -10,7 +10,15 @@ class EdificioController extends Controller
 {
     public function index()
     {
-        return Edificio::all();
+        $edificios = Edificio::all()->map(function ($edificios) {
+            return [
+                'id' => $edificios -> EdificioID,
+                'Nombre' =>$edificios -> Nombre,
+                'CalleID' =>$edificios -> CalleID
+            ];
+        });
+
+        return response()->json($edificios);
     }
 
     public function show($id)
