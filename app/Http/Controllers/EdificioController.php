@@ -5,16 +5,18 @@ namespace App\Http\Controllers;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Edificio;
+use App\Models\Calle;
 
 class EdificioController extends Controller
 {
     public function index()
     {
         $edificios = Edificio::all()->map(function ($edificios) {
+            $calle = Calle::find($edificios->CalleID);
             return [
                 'id' => $edificios -> EdificioID,
                 'Nombre' =>$edificios -> Nombre,
-                'CalleID' =>$edificios -> CalleID
+                'Calle' =>$calle -> Nombre
             ];
         });
 

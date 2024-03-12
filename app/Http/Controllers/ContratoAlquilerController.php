@@ -5,19 +5,25 @@ namespace App\Http\Controllers;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\ContratoAlquiler;
+use App\Models\Apartamento;
+use App\Models\Inquilino;
+
 
 class ContratoAlquilerController extends Controller
 {
     public function index()
     {
         $contratoAlquiler = ContratoAlquiler::all()->map(function ($contratoAlquiler) {
+            $apartamento = Apartamento::find($contratoAlquiler->ApartamentoID);
+            $inquilino = Inquilino::find($contratoAlquiler->InquilinoID);
+
             return [
-                'id' => $contratoAlquiler -> ContratoAlquilerID,
-                'FechaInicio' =>$contratoAlquiler -> FechaInicio,
-                'FechaFin' =>$contratoAlquiler -> FechaFin,
+                'id' => $contratoAlquiler -> ContratoID,
+                'Fecha_Inicio' =>$contratoAlquiler -> Fecha_Inicio,
+                'Fecha_Final' =>$contratoAlquiler -> Fecha_Final,
                 'Monto' =>$contratoAlquiler -> Monto,
-                'InquilinoID' =>$contratoAlquiler -> InquilinoID,
-                'ApartamentoID' =>$contratoAlquiler -> ApartamentoID
+                'Inquilino' =>$inquilino -> Nombre,
+                'Apartamento' =>$apartamento -> Nombre
             ];
         });
 

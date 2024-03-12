@@ -9,8 +9,8 @@ class Edificio extends Model
 {
     use HasFactory;
     protected $table = 'edificios';
-    protected $primaryKey = 'Edificio';
-    protected $fillable = ['Nombre', 'CalleID'];
+    protected $primaryKey = 'EdificioID';
+    protected $fillable = ['Nombre', 'CalleID','EstadoID'];
 
     public function edificios()
     {

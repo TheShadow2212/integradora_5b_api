@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Ciudad;
+use App\Models\Region;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 
@@ -11,10 +12,11 @@ class CiudadController extends Controller
     public function index()
     {
         $ciudades = Ciudad::all()->map(function ($ciudades) {
+            $region = Region::find($ciudades->RegionID);
             return [
                 'id' => $ciudades -> CiudadID,
                 'Nombre' =>$ciudades -> Nombre,
-                'RegionID' =>$ciudades -> RegionID
+                'Region' =>$region -> Nombre,
             ];
         });
 

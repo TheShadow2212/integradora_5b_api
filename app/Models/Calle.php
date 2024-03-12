@@ -9,7 +9,7 @@ class Calle extends Model
 {
     use HasFactory;
     protected $table = 'calles';
-    protected $primaryKey = 'Calle';
+    protected $primaryKey = 'CalleID';
     protected $fillable = ['Nombre', 'BarrioID'];
 
     public function calles()

@@ -5,16 +5,18 @@ namespace App\Http\Controllers;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Distrito;
+use App\Models\Ciudad;
 
 class DistritoController extends Controller
 {
     public function index()
     {
         $distritos = Distrito::all()->map(function ($distritos) {
+            $ciudad = Ciudad::find($distritos->CiudadID);
             return [
                 'id' => $distritos -> DistritoID,
                 'Nombre' =>$distritos -> Nombre,
-                'CiudadID' =>$distritos -> CiudadID
+                'Ciudad' =>$ciudad -> Nombre
             ];
         });
 

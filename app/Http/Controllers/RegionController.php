@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Region;
+use App\Models\Pais;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 
@@ -11,10 +12,11 @@ class RegionController extends Controller
     public function index()
     {
         $regiones = Region::all()->map(function ($regiones) {
+            $pais = Pais::find($regiones->PaisID);
             return [
                 'id' => $regiones -> RegionID,
                 'Nombre' =>$regiones -> Nombre,
-                'PaisID' =>$regiones -> PaisID
+                'Pais' =>$pais->Nombre,
             ];
         });
 

@@ -9,7 +9,7 @@ class Ciudad extends Model
 {
     use HasFactory;
     protected $table = 'ciudades';
-    protected $primaryKey = 'Ciudad';
+    protected $primaryKey = 'CiudadID';
     protected $fillable = ['Nombre', 'RegionID'];
 
     public function ciudades()

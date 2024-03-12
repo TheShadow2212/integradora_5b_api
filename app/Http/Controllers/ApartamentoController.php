@@ -5,16 +5,18 @@ namespace App\Http\Controllers;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Apartamento;
+use App\Models\Edificio;
 
 class ApartamentoController extends Controller
 {
     public function index()
     {
         $apartamentos = Apartamento::all()->map(function ($apartamentos) {
+            $edificio = Edificio::find($apartamentos->EdificioID);
             return [
                 'id' => $apartamentos -> ApartamentoID,
                 'Nombre' =>$apartamentos -> Nombre,
-                'EdificioID' =>$apartamentos -> EdificioID,
+                'Edificio' =>$edificio -> Nombre,
                 'Descripcion' =>$apartamentos -> Descripcion,
                 'Estado' =>$apartamentos -> Estado
             ];
