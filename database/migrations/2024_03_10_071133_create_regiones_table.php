@@ -14,7 +14,9 @@ return new class extends Migration
         Schema::create('regiones', function (Blueprint $table) {
             $table->id('RegionID');
             $table->string('Nombre', 50);
-            $table->foreignId('PaisID')->constrained('paises', 'PaisID');
+            $table->foreignId('PaisID')
+                ->constrained('paises', 'PaisID')
+                ->onDelete('cascade');
             $table->timestamps();
         });
     }

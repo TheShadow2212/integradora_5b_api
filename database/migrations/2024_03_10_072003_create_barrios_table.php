@@ -14,7 +14,9 @@ return new class extends Migration
         Schema::create('barrios', function (Blueprint $table) {
             $table->id('BarrioID');
             $table->string('Nombre', 50);
-            $table->foreignId('DistritoID')->constrained('distritos', 'DistritoID');
+            $table->foreignId('DistritoID')
+            ->constrained('distritos', 'DistritoID')
+            ->onDelete('cascade');
             $table->timestamps();
         });
     }

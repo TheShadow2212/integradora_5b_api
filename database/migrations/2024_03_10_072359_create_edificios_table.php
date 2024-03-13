@@ -14,7 +14,9 @@ return new class extends Migration
         Schema::create('edificios', function (Blueprint $table) {
             $table->id('EdificioID');
             $table->string('Nombre', 50);
-            $table->foreignId('CalleID')->constrained('calles', 'CalleID');
+            $table->foreignId('CalleID')
+            ->constrained('calles', 'CalleID')
+            ->onDelete('cascade');
             $table->timestamps();
         });
     }
