@@ -15,8 +15,8 @@ return new class extends Migration
             $table->id('ContratoID');
             $table->date('Fecha_Inicio');
             $table->date('Fecha_Final');
-            $table->foreignId('InquilinoID')->constrained('inquilinos', 'InquilinoID');
-            $table->foreignId('ApartamentoID')->constrained('apartamentos', 'ApartamentoID');
+            $table->foreignId('InquilinoID')->constrained('inquilinos', 'InquilinoID')->onDelete('cascade');
+            $table->foreignId('ApartamentoID')->constrained('apartamentos', 'ApartamentoID')->onDelete('cascade');
             $table->decimal('Monto', 10, 2)->default(0);
             $table->timestamps();
         });

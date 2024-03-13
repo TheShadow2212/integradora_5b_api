@@ -69,6 +69,6 @@ class ContratoAlquilerController extends Controller
     public function delete($id)
     {
         ContratoAlquiler::findOrFail($id)->delete();
-        return response('Deleted Successfully', 200);
+        return response()->json('Deleted Successfully', 200);
     }
 }

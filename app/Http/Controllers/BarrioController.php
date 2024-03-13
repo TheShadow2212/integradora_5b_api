@@ -56,6 +56,6 @@ class BarrioController extends Controller
     public function delete($id)
     {
         Barrio::findOrFail($id)->delete();
-        return response('Deleted Successfully', 200);
+        return response()->json('Deleted Successfully', 200);
     }    
 }

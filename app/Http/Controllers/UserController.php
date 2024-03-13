@@ -4,12 +4,27 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\User;
+use App\Models\Role;
 use Illuminate\Support\Facades\Mail;
 use App\Mail\emailVerify;
 use Illuminate\Support\Facades\URL;
 
 class UserController extends Controller
 {
+    public function index()
+    {
+        $usuarios = User::all()->map(function ($usuarios) {
+            $rol = Role::find($usuarios->role_id);
+            return [
+                'id' => $usuarios -> id,
+                'Nombre' =>$usuarios -> name,
+                'Email' =>$usuarios -> email,
+                'Rol' =>$rol -> name,
+            ];
+        });
+
+        return response()->json($usuarios);
+    }
     public function create(Request $request)
     {
         $validatedData = $request->validate([
@@ -29,6 +44,32 @@ class UserController extends Controller
         Mail::to($user->email)->send(new emailVerify($url));
     
         return response()->json($user, 201);
+    }
+
+    public function show($id)
+    {
+        return User::find($id);
+    }
+
+    public function update(Request $request, $id)
+    {
+        $this->validate($request, [
+            'name' => 'required|string|max:50',
+            'email' => 'required|email|max:70',
+            'password' => 'required|string|max:50',
+            'role_id' => 'required|integer',
+        ]);
+
+        $user = User::findOrFail($id);
+        $user->update($request->all());
+
+        return response()->json($user, 200);
+    }
+
+    public function delete($id)
+    {
+        User::findOrFail($id)->delete();
+        return response()->json('Deleted Successfully', 200);
     }
 
 

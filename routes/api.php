@@ -109,6 +109,14 @@ Route::prefix('auth')->middleware(['jwtAuth', 'roleAuth'])->group(function () {
     Route::post('inquilinos', [InquilinoController::class, 'create']);
     Route::put('inquilinos/{id}', [InquilinoController::class, 'update']);
     Route::delete('inquilinos/{id}', [InquilinoController::class, 'delete']);
+
+    //Rutas para el recurso usuario - CRUD
+    Route::get('usuarios', [UserController::class, 'index']);
+    Route::get('usuarios/{id}', [UserController::class, 'show']);
+    Route::post('usuarios', [UserController::class, 'create']);
+    Route::put('usuarios/{id}', [UserController::class, 'update']);
+    Route::delete('usuarios/{id}', [UserController::class, 'delete']);
+    
 });
 
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {

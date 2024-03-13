@@ -14,7 +14,9 @@ return new class extends Migration
         Schema::create('apartamentos', function (Blueprint $table) {
             $table->id('ApartamentoID');
             $table->string('Nombre', 50);
-            $table->foreignId('EdificioID')->constrained('edificios', 'EdificioID');
+            $table->foreignId('EdificioID')
+            ->constrained('edificios', 'EdificioID')
+            ->onDelete('cascade');
             $table->string('Descripcion', 255);
             $table->integer('Estado');
             $table->timestamps();
