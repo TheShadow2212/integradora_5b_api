@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use App\Models\ContratoAlquiler;
 use App\Models\Apartamento;
 use App\Models\Inquilino;
+use Exception;
 
 
 class ContratoAlquilerController extends Controller
@@ -37,9 +38,10 @@ class ContratoAlquilerController extends Controller
 
     public function create(Request $request)
     {
+        try {
         $this->validate($request, [
-            'FechaInicio' => 'required|date',
-            'FechaFin' => 'required|date',
+            'Fecha_Inicio' => 'required|date',
+            'Fecha_Final' => 'required|date',
             'Monto' => 'required|numeric',
             'InquilinoID' => 'required|integer',
             'ApartamentoID' => 'required|integer',
@@ -48,10 +50,15 @@ class ContratoAlquilerController extends Controller
         $contratoAlquiler = ContratoAlquiler::create($request->all());
 
         return response()->json($contratoAlquiler, 201);
+        }
+        catch(Exception $e){
+            return response()->json(['error' => $e->getMessage()], 500);
+        }
     }
 
     public function update(Request $request, $id)
     {
+       try {
         $this->validate($request, [
             'FechaInicio' => 'required|date',
             'FechaFin' => 'required|date',
@@ -64,6 +71,10 @@ class ContratoAlquilerController extends Controller
         $contratoAlquiler->update($request->all());
 
         return response()->json($contratoAlquiler, 200);
+       }
+       catch(Exception $e){
+        return response()->json(['error' => $e->getMessage()], 500);
+       }
     }
 
     public function delete($id)

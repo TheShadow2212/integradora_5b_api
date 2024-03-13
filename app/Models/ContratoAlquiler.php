@@ -11,7 +11,7 @@ class ContratoAlquiler extends Model
 
     protected $table = 'contratos_alquiler';
     protected $primaryKey = 'ContratoID';
-    protected $fillable = ['Fecha_Inicio', 'Fecha_Final', 'InquilinoID', 'ApartamentoID'];
+    protected $fillable = ['Fecha_Inicio', 'Fecha_Final', 'InquilinoID', 'ApartamentoID','Monto'];
 
     public function inquilino()
     {
