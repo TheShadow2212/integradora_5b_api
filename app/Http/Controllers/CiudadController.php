@@ -56,6 +56,6 @@ class CiudadController extends Controller
     public function delete($id)
     {
         Ciudad::findOrFail($id)->delete();
-        return response('Deleted Successfully', 200);
+        return response()->json('Deleted Successfully', 200);
     }
 }

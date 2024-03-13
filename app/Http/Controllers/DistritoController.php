@@ -56,6 +56,6 @@ class DistritoController extends Controller
     public function delete($id)
     {
         Distrito::findOrFail($id)->delete();
-        return response('Deleted Successfully', 200);
+        return response()->json('Deleted Successfully', 200);
     }    
 }
