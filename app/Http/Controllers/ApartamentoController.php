@@ -13,12 +13,13 @@ class ApartamentoController extends Controller
     {
         $apartamentos = Apartamento::all()->map(function ($apartamentos) {
             $edificio = Edificio::find($apartamentos->EdificioID);
+            $estado = $apartamentos->Estado == 1 ? 'Activo' : 'Inactivo';
             return [
                 'id' => $apartamentos -> ApartamentoID,
                 'Nombre' =>$apartamentos -> Nombre,
                 'Edificio' =>$edificio -> Nombre,
                 'Descripcion' =>$apartamentos -> Descripcion,
-                'Estado' =>$apartamentos -> Estado
+                'Estado' =>$estado
             ];
         });
 

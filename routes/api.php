@@ -14,6 +14,7 @@ use App\Http\Controllers\EdificioController;
 use App\Http\Controllers\ApartamentoController;
 use App\Http\Controllers\ContratoAlquilerController;
 use App\Http\Controllers\InquilinoController;
+use App\Http\Controllers\RolesController;
 
 /*
 |--------------------------------------------------------------------------
@@ -116,6 +117,9 @@ Route::prefix('auth')->middleware(['jwtAuth', 'roleAuth'])->group(function () {
     Route::post('usuarios', [UserController::class, 'create']);
     Route::put('usuarios/{id}', [UserController::class, 'update']);
     Route::delete('usuarios/{id}', [UserController::class, 'delete']);
+
+    //Rutas para el recurso roles - CRUD
+    Route::get('roles', [RolesController::class, 'index']);
     
 });
 
