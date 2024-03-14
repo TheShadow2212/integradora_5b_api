@@ -56,7 +56,6 @@ class UserController extends Controller
         $this->validate($request, [
             'name' => 'required|string|max:50',
             'email' => 'required|email|max:70',
-            'password' => 'required|string|max:50',
             'role_id' => 'required|integer',
         ]);
 
