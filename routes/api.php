@@ -86,36 +86,36 @@ Route::prefix('auth')->middleware(['jwtAuth', 'roleAuth'])->group(function () {
     //Rutas para el recurso edificio - CRUD
     Route::get('edificios', [EdificioController::class, 'index']) ->middleware('userAuth:1,2,3');
     Route::get('edificios/{id}', [EdificioController::class, 'show']) ->middleware('userAuth:1,2,3');
-    Route::post('edificios', [EdificioController::class, 'create']) ->middleware('userAuth:1,2');
-    Route::put('edificios/{id}', [EdificioController::class, 'update']) ->middleware('userAuth:1,2');
+    Route::post('edificios', [EdificioController::class, 'create']) ->middleware('userAuth:1');
+    Route::put('edificios/{id}', [EdificioController::class, 'update']) ->middleware('userAuth:1');
     Route::delete('edificios/{id}', [EdificioController::class, 'delete']) ->middleware('userAuth:1');
 
     //Rutas para el recurso apartamento - CRUD
     Route::get('apartamentos', [ApartamentoController::class, 'index']) ->middleware('userAuth:1,2,3');
     Route::get('apartamentos/{id}', [ApartamentoController::class, 'show']) ->middleware('userAuth:1,2,3');
-    Route::post('apartamentos', [ApartamentoController::class, 'create']) ->middleware('userAuth:1,2');
-    Route::put('apartamentos/{id}', [ApartamentoController::class, 'update']) ->middleware('userAuth:1,2');
+    Route::post('apartamentos', [ApartamentoController::class, 'create']) ->middleware('userAuth:1');
+    Route::put('apartamentos/{id}', [ApartamentoController::class, 'update']) ->middleware('userAuth:1');
     Route::delete('apartamentos/{id}', [ApartamentoController::class, 'delete']) ->middleware('userAuth:1');
 
     //Rutas para el recurso contratoAlquiler - CRUD
     Route::get('contratoAlquilers', [ContratoAlquilerController::class, 'index']) ->middleware('userAuth:1,2,3');
     Route::get('contratoAlquilers/{id}', [ContratoAlquilerController::class, 'show']) ->middleware('userAuth:1,2,3');
-    Route::post('contratoAlquilers', [ContratoAlquilerController::class, 'create']) ->middleware('userAuth:1,2');
-    Route::put('contratoAlquilers/{id}', [ContratoAlquilerController::class, 'update']) ->middleware('userAuth:1,2');
+    Route::post('contratoAlquilers', [ContratoAlquilerController::class, 'create']) ->middleware('userAuth:1');
+    Route::put('contratoAlquilers/{id}', [ContratoAlquilerController::class, 'update']) ->middleware('userAuth:1');
     Route::delete('contratoAlquilers/{id}', [ContratoAlquilerController::class, 'delete']) ->middleware('userAuth:1');
 
     //Rutas para el recurso inquilino - CRUD
     Route::get('inquilinos', [InquilinoController::class, 'index']) ->middleware('userAuth:1,2,3');
     Route::get('inquilinos/{id}', [InquilinoController::class, 'show']) ->middleware('userAuth:1,2,3');
-    Route::post('inquilinos', [InquilinoController::class, 'create']) ->middleware('userAuth:1,2');
-    Route::put('inquilinos/{id}', [InquilinoController::class, 'update']) ->middleware('userAuth:1,2');
+    Route::post('inquilinos', [InquilinoController::class, 'create']) ->middleware('userAuth:1');
+    Route::put('inquilinos/{id}', [InquilinoController::class, 'update']) ->middleware('userAuth:1');
     Route::delete('inquilinos/{id}', [InquilinoController::class, 'delete']) ->middleware('userAuth:1');
 
     //Rutas para el recurso usuario - CRUD
-    Route::get('usuarios', [UserController::class, 'index']) ->middleware('userAuth:1,2,3');
-    Route::get('usuarios/{id}', [UserController::class, 'show']) ->middleware('userAuth:1,2,3');
-    Route::post('usuarios', [UserController::class, 'create']) ->middleware('userAuth:1,2');
-    Route::put('usuarios/{id}', [UserController::class, 'update']) ->middleware('userAuth:1,2');
+    Route::get('usuarios', [UserController::class, 'index']) ->middleware('userAuth:1');
+    Route::get('usuarios/{id}', [UserController::class, 'show']) ->middleware('userAuth:1');
+    Route::post('usuarios', [UserController::class, 'create']) ->middleware('userAuth:1');
+    Route::put('usuarios/{id}', [UserController::class, 'update']) ->middleware('userAuth:1');
     Route::delete('usuarios/{id}', [UserController::class, 'delete']) ->middleware('userAuth:1');
 
     //Rutas para el recurso roles - CRUD
