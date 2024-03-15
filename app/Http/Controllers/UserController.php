@@ -8,6 +8,7 @@ use App\Models\Role;
 use Illuminate\Support\Facades\Mail;
 use App\Mail\emailVerify;
 use Illuminate\Support\Facades\URL;
+use Illuminate\Support\Facades\Hash;
 
 class UserController extends Controller
 {
@@ -36,7 +37,7 @@ class UserController extends Controller
         $user = new User;
         $user->name = $validatedData['name'];
         $user->email = $validatedData['email'];
-        $user->password = bcrypt($validatedData['password']);
+        $user->password = Hash::make($validatedData['password']);
         $user->role_id = 3;
         $user->save();
 

@@ -52,7 +52,7 @@ class Kernel extends HttpKernel
      *
      * @var array<string, class-string|string>
      */
-    protected $middlewareAliases = [
+    protected $routeMiddleware = [
         'auth' => \App\Http\Middleware\Authenticate::class,
         'auth.basic' => \Illuminate\Auth\Middleware\AuthenticateWithBasicAuth::class,
         'auth.session' => \Illuminate\Session\Middleware\AuthenticateSession::class,
@@ -64,8 +64,8 @@ class Kernel extends HttpKernel
         'signed' => \App\Http\Middleware\ValidateSignature::class,
         'throttle' => \Illuminate\Routing\Middleware\ThrottleRequests::class,
         'verified' => \Illuminate\Auth\Middleware\EnsureEmailIsVerified::class,
-        'jwtAuth' => \App\Http\Middleware\JWTAuthenticate::class,
-        'roleAuth' => \App\Http\Middleware\RoleMiddleware::class,
-        'userAuth' => \App\Http\Middleware\UsuarioMiddleware::class,
+        'JWTAuthenticate' => \App\Http\Middleware\JWTAuthenticate::class,
+        'roleAuth' => \App\Http\Middleware\Role::class,
+        'userAuth' => \App\Http\Middleware\UserAccessMiddleware::class,
     ];
 }

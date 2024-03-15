@@ -40,7 +40,7 @@ Route::prefix('auth')->group (function () {
 });
 
 //Cambiar y quitar algunas rutas para que jale el middleware
-Route::prefix('auth')->middleware(['jwtAuth', 'roleAuth'])->group(function () {
+Route::prefix('auth')->middleware(['JWTAuthenticate', 'roleAuth'])->group(function () {
     //Rutas para el recurso pais - CRUD
     Route::get('paises', [PaisController::class, 'index'])->middleware('userAuth:1,2,3');
     Route::get('paises/{id}', [PaisController::class, 'show'])->middleware('userAuth:1,2,3');
@@ -112,8 +112,8 @@ Route::prefix('auth')->middleware(['jwtAuth', 'roleAuth'])->group(function () {
     Route::delete('inquilinos/{id}', [InquilinoController::class, 'delete']) ->middleware('userAuth:1');
 
     //Rutas para el recurso usuario - CRUD
-    Route::get('usuarios', [UserController::class, 'index']) ->middleware('userAuth:1');
-    Route::get('usuarios/{id}', [UserController::class, 'show']) ->middleware('userAuth:1');
+    Route::get('usuarios', [UserController::class, 'index'])->middleware('userAuth:1');
+    Route::get('usuarios/{id}', [UserController::class, 'show'])->middleware('userAuth:1');
     Route::post('usuarios', [UserController::class, 'create']) ->middleware('userAuth:1');
     Route::put('usuarios/{id}', [UserController::class, 'update']) ->middleware('userAuth:1');
     Route::delete('usuarios/{id}', [UserController::class, 'delete']) ->middleware('userAuth:1');
