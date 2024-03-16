@@ -7,9 +7,12 @@
     "require": {
         "php": "^8.1",
         "guzzlehttp/guzzle": "^7.2",
+        "jenssegers/mongodb": "*",
         "laravel/framework": "^9.0",
         "laravel/sanctum": "^2.14",
         "laravel/tinker": "^2.7",
+        "mongodb/laravel-mongodb": "^3.9",
+        "mongodb/mongodb": "*",
         "tymon/jwt-auth": "^2.1"
     },
     "require-dev": {

@@ -17,6 +17,7 @@ return [
 
     'default' => env('DB_CONNECTION', 'mysql'),
 
+
     /*
     |--------------------------------------------------------------------------
     | Database Connections
@@ -34,6 +35,12 @@ return [
     */
 
     'connections' => [
+
+        'mongodb' => [
+            'driver' => 'mongodb',
+            'dsn' => env('DB_URI', 'mongodb+srv://Alejandro:2212@cluster0.6wybzch.mongodb.net/'),
+            'database' => 'Laravel',
+        ],
 
         'sqlite' => [
             'driver' => 'sqlite',
@@ -92,6 +99,7 @@ return [
             // 'encrypt' => env('DB_ENCRYPT', 'yes'),
             // 'trust_server_certificate' => env('DB_TRUST_SERVER_CERTIFICATE', 'false'),
         ],
+        
 
     ],
 

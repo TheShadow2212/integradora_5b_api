@@ -15,6 +15,7 @@ use App\Http\Controllers\ApartamentoController;
 use App\Http\Controllers\ContratoAlquilerController;
 use App\Http\Controllers\InquilinoController;
 use App\Http\Controllers\RolesController;
+use App\Http\Controllers\InteractionController;
 
 /*
 |--------------------------------------------------------------------------
@@ -26,6 +27,7 @@ use App\Http\Controllers\RolesController;
 | be assigned to the "api" middleware group. Make something great!
 |
 */
+
 
 Route::post('user/register', [UserController::class, 'create']); 
 Route::get('/verify-email/{id}', [AuthController::class, 'verifyEmail'])->name('verification.email');
@@ -41,6 +43,10 @@ Route::prefix('auth')->group (function () {
 
 //Cambiar y quitar algunas rutas para que jale el middleware
 Route::prefix('auth')->middleware(['JWTAuthenticate', 'roleAuth'])->group(function () {
+
+    //Rutas para el recurso interaction - CRUD
+    Route::get('interactions', [InteractionController::class, 'index']);
+    
     //Rutas para el recurso pais - CRUD
     Route::get('paises', [PaisController::class, 'index'])->middleware('userAuth:1,2,3');
     Route::get('paises/{id}', [PaisController::class, 'show'])->middleware('userAuth:1,2,3');
