@@ -39,7 +39,23 @@ class PaisController extends Controller
 
     public function show($id)
     {
-        return Pais::find($id);
+        DB::enableQueryLog();
+
+        $pais = Pais::find($id);
+
+        $queries = DB::getQueryLog();
+        $lastQuery = end($queries);
+    
+        Interaction::on('mongodb')->create([
+            'user_id' => auth()->user()->id, 
+            'route' => '/paises',
+            'interaction_type' => 'GET',
+            'interaction_query' => $lastQuery['query'],
+            'interaction_date' => Carbon::now()->toDateString(),
+            'interaction_time' => Carbon::now()->toTimeString(),
+        ]);
+
+        return $pais;
     }
 
     public function create(Request $request)
