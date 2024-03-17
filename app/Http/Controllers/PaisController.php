@@ -99,7 +99,7 @@ class PaisController extends Controller
     
         Interaction::on('mongodb')->create([
             'user_id' => auth()->user()->id, 
-            'route' => '/paises',
+            'route' => '/paises/' . $id,
             'interaction_type' => 'PUT',
             'interaction_query' => $lastQuery['query'],
             'interaction_date' => Carbon::now()->toDateString(),
