@@ -13,7 +13,7 @@ class InteractionController extends Controller
         $interactions = Interaction::all()->map(function ($interaction) {
             $user = User::find($interaction->user_id); 
             return [
-                'Usuario' => $user->name . '(' . $user->email . ')',
+                'Usuario' => $user->name . ',(' . $user->email . ')',
                 'route' => $interaction->route,
                 'interaction_type' => $interaction->interaction_type,
                 'interaction_query' => $interaction->interaction_query,
