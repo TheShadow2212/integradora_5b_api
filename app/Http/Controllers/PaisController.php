@@ -73,7 +73,7 @@ class PaisController extends Controller
     
         Interaction::on('mongodb')->create([
             'user_id' => auth()->user()->id, 
-            'route' => '/paises',
+            'route' => '/paises/create',
             'interaction_type' => 'POST',
             'interaction_query' => $lastQuery['query'],
             'interaction_date' => Carbon::now()->toDateString(),
@@ -99,7 +99,7 @@ class PaisController extends Controller
     
         Interaction::on('mongodb')->create([
             'user_id' => auth()->user()->id, 
-            'route' => '/paises/' . $id,
+            'route' => '/paises/update/' . $id,
             'interaction_type' => 'PUT',
             'interaction_query' => $lastQuery['query'],
             'interaction_date' => Carbon::now()->toDateString(),
@@ -120,7 +120,7 @@ class PaisController extends Controller
     
         Interaction::on('mongodb')->create([
             'user_id' => auth()->user()->id, 
-            'route' => '/paises',
+            'route' => '/paises'. $id,
             'interaction_type' => 'DELETE',
             'interaction_query' => $lastQuery['query'],
             'interaction_date' => Carbon::now()->toDateString(),
