@@ -39,22 +39,20 @@ class PaisController extends Controller
 
     public function show(Request $request, $id)
     {
-        DB::enableQueryLog();
-
         $pais = Pais::find($id);
 
-        $queries = DB::getQueryLog();
-        $lastQuery = end($queries);
-    
-        Interaction::on('mongodb')->create([
-            'user_id' => auth()->user()->id, 
-            'route' => $request->path(),
-            'interaction_type' => $request->method(),
-            'interaction_query' => $lastQuery['query'],
-            'interaction_date' => Carbon::now()->toDateString(),
-            'interaction_time' => Carbon::now()->toTimeString(),
-        ]);
+        /* Esto no lo agregues a los demas, solo es por si llegara a preguntar por la traida de datos en el update
+            Si llega ser el caso agregarlo a los demas
 
+            Interaction::on('mongodb')->create([
+                'user_id' => auth()->user()->id, 
+                'route' => $request->path(),
+                'interaction_type' => $request->method(),
+                'interaction_query' => $pais->toArray(),
+                'interaction_date' => Carbon::now()->toDateString(),
+                'interaction_time' => Carbon::now()->toTimeString(),
+            ]);
+        */
         return $pais;
     }
 
