@@ -3,6 +3,9 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Models\Interaction;
+use Carbon\Carbon;
+use Illuminate\Support\Facades\DB;
 use App\Models\User;
 use App\Models\Role;
 use Illuminate\Support\Facades\Mail;
@@ -12,7 +15,7 @@ use Illuminate\Support\Facades\Hash;
 
 class UserController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
         $usuarios = User::all()->map(function ($usuarios) {
             $rol = Role::find($usuarios->role_id);
@@ -66,7 +69,7 @@ class UserController extends Controller
         return response()->json($user, 200);
     }
 
-    public function delete($id)
+    public function delete(Request $request,$id)
     {
         User::findOrFail($id)->delete();
         return response()->json('Deleted Successfully', 200);

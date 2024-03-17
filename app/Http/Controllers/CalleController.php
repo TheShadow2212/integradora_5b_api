@@ -4,14 +4,19 @@ namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use App\Models\Interaction;
+use Carbon\Carbon;
+use Illuminate\Support\Facades\DB;
 use App\Models\Calle;
 use App\Models\Barrio;
 
 
 class CalleController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
+        DB::enableQueryLog();
+
         $calles = Calle::all()->map(function ($calles) {
             $barrio = Barrio::find($calles->BarrioID);
             return [
@@ -20,6 +25,18 @@ class CalleController extends Controller
                 'Barrio' =>$barrio -> Nombre
             ];
         });
+
+        $queries = DB::getQueryLog();
+        $lastQuery = end($queries);
+
+        Interaction::on('mongodb')->create([
+            'user_id' => auth()->user()->id, 
+            'route' => $request->path(),
+            'interaction_type' => $request->method(),
+            'interaction_query' => $lastQuery['query'],
+            'interaction_date' => Carbon::now()->toDateString(),
+            'interaction_time' => Carbon::now()->toTimeString(),
+        ]);
 
         return response()->json($calles);
     }
@@ -38,6 +55,15 @@ class CalleController extends Controller
 
         $calle = Calle::create($request->all());
 
+        Interaction::on('mongodb')->create([
+            'user_id' => auth()->user()->id, 
+            'route' => $request->path(),
+            'interaction_type' => $request->method(),
+            'interaction_query' => $calle->toArray(),
+            'interaction_date' => Carbon::now()->toDateString(),
+            'interaction_time' => Carbon::now()->toTimeString(),
+        ]);
+
         return response()->json($calle, 201);
     }
 
@@ -51,12 +77,33 @@ class CalleController extends Controller
         $calle = Calle::findOrFail($id);
         $calle->update($request->all());
 
+        Interaction::on('mongodb')->create([
+            'user_id' => auth()->user()->id, 
+            'route' => $request->path(),
+            'interaction_type' => $request->method(),
+            'interaction_query' => $calle->toArray(),
+            'interaction_date' => Carbon::now()->toDateString(),
+            'interaction_time' => Carbon::now()->toTimeString(),
+        ]);
+
         return response()->json($calle, 200);
     }
 
-    public function delete($id)
+    public function delete(Request $request, $id)
     {
-        Calle::findOrFail($id)->delete();
+        $calle = Calle::findOrFail($id);
+
+        Interaction::on('mongodb')->create([
+            'user_id' => auth()->user()->id, 
+            'route' => $request->path(),
+            'interaction_type' => $request->method(),
+            'interaction_query' => $calle->toArray(),
+            'interaction_date' => Carbon::now()->toDateString(),
+            'interaction_time' => Carbon::now()->toTimeString(),
+        ]);
+
+        $calle->delete();
+
         return response()->json('Deleted Successfully', 200);
     }
 }

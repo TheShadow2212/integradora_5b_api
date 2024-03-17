@@ -4,13 +4,18 @@ namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use App\Models\Interaction;
+use Carbon\Carbon;
+use Illuminate\Support\Facades\DB;
 use App\Models\Apartamento;
 use App\Models\Edificio;
 
 class ApartamentoController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
+        DB::enableQueryLog();
+
         $apartamentos = Apartamento::all()->map(function ($apartamentos) {
             $edificio = Edificio::find($apartamentos->EdificioID);
             $estado = $apartamentos->Estado == 1 ? 'Activo' : 'Inactivo';
@@ -22,6 +27,18 @@ class ApartamentoController extends Controller
                 'Estado' =>$estado
             ];
         });
+
+        $queries = DB::getQueryLog();
+        $lastQuery = end($queries);
+
+        Interaction::on('mongodb')->create([
+            'user_id' => auth()->user()->id, 
+            'route' => $request->path(),
+            'interaction_type' => $request->method(),
+            'interaction_query' => $lastQuery['query'],
+            'interaction_date' => Carbon::now()->toDateString(),
+            'interaction_time' => Carbon::now()->toTimeString(),
+        ]);
 
         return response()->json($apartamentos);
     }
@@ -42,6 +59,14 @@ class ApartamentoController extends Controller
 
         $apartamento = Apartamento::create($request->all());
 
+        Interaction::on('mongodb')->create([
+            'user_id' => auth()->user()->id, 
+            'route' => $request->path(),
+            'interaction_type' => $request->method(),
+            'interaction_date' => Carbon::now()->toDateString(),
+            'interaction_time' => Carbon::now()->toTimeString(),
+        ]);
+
         return response()->json($apartamento, 201);
     }
 
@@ -57,12 +82,32 @@ class ApartamentoController extends Controller
         $apartamento = Apartamento::findOrFail($id);
         $apartamento->update($request->all());
 
+        Interaction::on('mongodb')->create([
+            'user_id' => auth()->user()->id, 
+            'route' => $request->path(),
+            'interaction_type' => $request->method(),
+            'interaction_date' => Carbon::now()->toDateString(),
+            'interaction_time' => Carbon::now()->toTimeString(),
+        ]);
+
         return response()->json($apartamento, 200);
     }
 
     public function delete($id)
     {
-        Apartamento::findOrFail($id)->delete();
+        $apartamento = Apartamento::findOrFail($id);
+
+        Interaction::on('mongodb')->create([
+            'user_id' => auth()->user()->id, 
+            'route' => $request->path(),
+            'interaction_type' => $request->method(),
+            'interaction_query' => $apartamento->toArray(),
+            'interaction_date' => Carbon::now()->toDateString(),
+            'interaction_time' => Carbon::now()->toTimeString(),
+        ]);
+
+        $apartamento->delete();
+
         return response()->json('Deleted Successfully', 200);
     }
 }

@@ -4,12 +4,17 @@ namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use App\Models\Interaction;
+use Carbon\Carbon;
+use Illuminate\Support\Facades\DB;
 use App\Models\Inquilino;
 
 class InquilinoController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
+        DB::enableQueryLog();
+
         $inquilinos = Inquilino::all()->map(function ($inquilinos) {
             return [
                 'id' => $inquilinos -> InquilinoID,
@@ -20,6 +25,18 @@ class InquilinoController extends Controller
                 'Email' =>$inquilinos -> Email
             ];
         });
+
+        $queries = DB::getQueryLog();
+        $lastQuery = end($queries);
+
+        Interaction::on('mongodb')->create([
+            'user_id' => auth()->user()->id, 
+            'route' => $request->path(),
+            'interaction_type' => $request->method(),
+            'interaction_query' => $lastQuery['query'],
+            'interaction_date' => Carbon::now()->toDateString(),
+            'interaction_time' => Carbon::now()->toTimeString(),
+        ]);
 
         return response()->json($inquilinos);
     }
@@ -41,6 +58,15 @@ class InquilinoController extends Controller
 
         $inquilino = Inquilino::create($request->all());
 
+        Interaction::on('mongodb')->create([
+            'user_id' => auth()->user()->id, 
+            'route' => $request->path(),
+            'interaction_type' => $request->method(),
+            'interaction_query' => $inquilino->toArray(), 
+            'interaction_date' => Carbon::now()->toDateString(),
+            'interaction_time' => Carbon::now()->toTimeString(),
+        ]);
+
         return response()->json($inquilino, 201);
     }
 
@@ -57,12 +83,33 @@ class InquilinoController extends Controller
         $inquilino = Inquilino::findOrFail($id);
         $inquilino->update($request->all());
 
+        Interaction::on('mongodb')->create([
+            'user_id' => auth()->user()->id, 
+            'route' => $request->path(),
+            'interaction_type' => $request->method(),
+            'interaction_query' => $inquilino->toArray(), 
+            'interaction_date' => Carbon::now()->toDateString(),
+            'interaction_time' => Carbon::now()->toTimeString(),
+        ]);
+
         return response()->json($inquilino, 200);
     }
 
     public function delete($id)
     {
-        Inquilino::findOrFail($id)->delete();
+        $inquilino = Inquilino::findOrFail($id);
+
+        Interaction::on('mongodb')->create([
+            'user_id' => auth()->user()->id, 
+            'route' => $request->path(),
+            'interaction_type' =>$request->method(),
+            'interaction_query' => $inquilino->toArray(), 
+            'interaction_date' => Carbon::now()->toDateString(),
+            'interaction_time' => Carbon::now()->toTimeString(),
+        ]);
+
+        $inquilino->delete();
+
         return response()->json('Deleted Successfully', 200);
     }
 }

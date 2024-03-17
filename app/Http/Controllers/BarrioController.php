@@ -4,13 +4,18 @@ namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use App\Models\Interaction;
+use Carbon\Carbon;
+use Illuminate\Support\Facades\DB;
 use App\Models\Barrio;
 use App\Models\Distrito;
 
 class BarrioController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
+        DB::enableQueryLog();
+        
         $barrios = Barrio::all()->map(function ($barrios) {
             $distrito = Distrito::find($barrios->DistritoID);
             return [
@@ -19,6 +24,18 @@ class BarrioController extends Controller
                 'Distrito' =>$distrito -> Nombre
             ];
         });
+
+        $queries = DB::getQueryLog();
+        $lastQuery = end($queries);
+
+        Interaction::on('mongodb')->create([
+            'user_id' => auth()->user()->id, 
+            'route' => 'api/barrios',
+            'interaction_type' => $request->method(),
+            'interaction_query' => $lastQuery['query'],
+            'interaction_date' => Carbon::now()->toDateString(),
+            'interaction_time' => Carbon::now()->toTimeString(),
+        ]);
 
         return response()->json($barrios);
     }
@@ -37,6 +54,15 @@ class BarrioController extends Controller
 
         $barrio = Barrio::create($request->all());
 
+        Interaction::on('mongodb')->create([
+            'user_id' => auth()->user()->id, 
+            'route' => $request->path(),
+            'interaction_type' => $request->method(),
+            'interaction_query' => $barrio->toArray(), 
+            'interaction_date' => Carbon::now()->toDateString(),
+            'interaction_time' => Carbon::now()->toTimeString(),
+        ]);
+
         return response()->json($barrio, 201);
     }
 
@@ -50,12 +76,33 @@ class BarrioController extends Controller
         $barrio = Barrio::findOrFail($id);
         $barrio->update($request->all());
 
+        Interaction::on('mongodb')->create([
+            'user_id' => auth()->user()->id, 
+            'route' => $request->path(),
+            'interaction_type' => $request->method(),
+            'interaction_query' => $barrio->toArray(), 
+            'interaction_date' => Carbon::now()->toDateString(),
+            'interaction_time' => Carbon::now()->toTimeString(),
+        ]);
+
         return response()->json($barrio, 200);
     }
 
-    public function delete($id)
+    public function delete(Request $request, $id)
     {
-        Barrio::findOrFail($id)->delete();
+        $barrio = Barrio::findOrFail($id);
+
+        Interaction::on('mongodb')->create([
+            'user_id' => auth()->user()->id, 
+            'route' => $request->path(),
+            'interaction_type' => $request->method(),
+            'interaction_query' => $barrio->toArray(), 
+            'interaction_date' => Carbon::now()->toDateString(),
+            'interaction_time' => Carbon::now()->toTimeString(),
+        ]);
+
+        $barrio->delete();
+
         return response()->json('Deleted Successfully', 200);
     }    
 }

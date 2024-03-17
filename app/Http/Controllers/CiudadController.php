@@ -6,11 +6,16 @@ use App\Models\Ciudad;
 use App\Models\Region;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use App\Models\Interaction;
+use Carbon\Carbon;
+use Illuminate\Support\Facades\DB;
 
 class CiudadController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
+        DB::enableQueryLog();
+
         $ciudades = Ciudad::all()->map(function ($ciudades) {
             $region = Region::find($ciudades->RegionID);
             return [
@@ -19,6 +24,19 @@ class CiudadController extends Controller
                 'Region' =>$region -> Nombre,
             ];
         });
+
+        
+        $queries = DB::getQueryLog();
+        $lastQuery = end($queries);
+    
+        Interaction::on('mongodb')->create([
+            'user_id' => auth()->user()->id, 
+            'route' => $request->path(),
+            'interaction_type' => $request->method(),
+            'interaction_query' => $lastQuery['query'],
+            'interaction_date' => Carbon::now()->toDateString(),
+            'interaction_time' => Carbon::now()->toTimeString(),
+        ]);
 
         return response()->json($ciudades);
     }
@@ -37,6 +55,15 @@ class CiudadController extends Controller
 
         $ciudad = Ciudad::create($request->all());
 
+        Interaction::on('mongodb')->create([
+            'user_id' => auth()->user()->id, 
+            'route' => $request->path(),
+            'interaction_type' => $request->method(),
+            'interaction_query' => $ciudad->toArray(), 
+            'interaction_date' => Carbon::now()->toDateString(),
+            'interaction_time' => Carbon::now()->toTimeString(),
+        ]);
+
         return response()->json($ciudad, 201);
     }
 
@@ -50,12 +77,33 @@ class CiudadController extends Controller
         $ciudad = Ciudad::findOrFail($id);
         $ciudad->update($request->all());
 
+        Interaction::on('mongodb')->create([
+            'user_id' => auth()->user()->id, 
+            'route' => $request->path(),
+            'interaction_type' => $request->method(),
+            'interaction_query' => $ciudad->toArray(), 
+            'interaction_date' => Carbon::now()->toDateString(),
+            'interaction_time' => Carbon::now()->toTimeString(),
+        ]);
+
         return response()->json($ciudad, 200);
     }
 
-    public function delete($id)
+    public function delete(Request $request,$id)
     {
-        Ciudad::findOrFail($id)->delete();
+        $ciudad = Ciudad::findOrFail($id);
+
+        Interaction::on('mongodb')->create([
+            'user_id' => auth()->user()->id, 
+            'route' => $request->path(),
+            'interaction_type' => $request->method(),
+            'interaction_query' => $ciudad->toArray(), 
+            'interaction_date' => Carbon::now()->toDateString(),
+            'interaction_time' => Carbon::now()->toTimeString(),
+        ]);
+
+        $ciudad->delete();
+
         return response()->json('Deleted Successfully', 200);
     }
 }

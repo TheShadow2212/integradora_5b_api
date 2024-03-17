@@ -6,11 +6,16 @@ use App\Models\Region;
 use App\Models\Pais;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use App\Models\Interaction;
+use Carbon\Carbon;
+use Illuminate\Support\Facades\DB;
 
 class RegionController extends Controller
 {
-    public function index()
+    public function index(Request $request )
     {
+        DB::enableQueryLog();
+
         $regiones = Region::all()->map(function ($regiones) {
             $pais = Pais::find($regiones->PaisID);
             return [
@@ -20,10 +25,22 @@ class RegionController extends Controller
             ];
         });
 
+        $queries = DB::getQueryLog();
+        $lastQuery = end($queries);
+    
+        Interaction::on('mongodb')->create([
+            'user_id' => auth()->user()->id, 
+            'route' => $request->path(),
+            'interaction_type' => $request->method(),
+            'interaction_query' => $lastQuery['query'],
+            'interaction_date' => Carbon::now()->toDateString(),
+            'interaction_time' => Carbon::now()->toTimeString(),
+        ]);
+
         return response()->json($regiones);
     }
 
-    public function show($id)
+    public function show(Request $request,$id)
     {
         return Region::find($id);
     }
@@ -36,6 +53,15 @@ class RegionController extends Controller
         ]);
 
         $region = Region::create($request->all());
+
+        Interaction::on('mongodb')->create([
+            'user_id' => auth()->user()->id, 
+            'route' => $request->path(),
+            'interaction_type' => $request->method(),
+            'interaction_query' => $region->toArray(), 
+            'interaction_date' => Carbon::now()->toDateString(),
+            'interaction_time' => Carbon::now()->toTimeString(),
+        ]);
 
         return response()->json($region, 201);
     }
@@ -50,12 +76,34 @@ class RegionController extends Controller
         $region = Region::findOrFail($id);
         $region->update($request->all());
 
+        Interaction::on('mongodb')->create([
+            'user_id' => auth()->user()->id, 
+            'route' => $request->path(),
+            'interaction_type' => $request->method(),
+            'interaction_query' => $region->toArray(), 
+            'interaction_date' => Carbon::now()->toDateString(),
+            'interaction_time' => Carbon::now()->toTimeString(),
+        ]);
+
         return response()->json($region, 200);
     }
 
-    public function delete($id)
+    public function delete(Request $request,$id)
     {
-        Region::findOrFail($id)->delete();
+
+        $region = Region::findOrFail($id);
+
+        Interaction::on('mongodb')->create([
+            'user_id' => auth()->user()->id, 
+            'route' => $request->path(),
+            'interaction_type' => $request->method(),
+            'interaction_query' => $region->toArray(), 
+            'interaction_date' => Carbon::now()->toDateString(),
+            'interaction_time' => Carbon::now()->toTimeString(),
+        ]);
+
+        $region->delete();
+
         return response()->json('Deleted Successfully', 200);
     }
 }
