@@ -11,7 +11,7 @@ use Illuminate\Support\Facades\DB;
 
 class PaisController extends Controller
 {
-    public function index()
+    public function index(Request $request )
     {
         DB::enableQueryLog();
 
@@ -27,8 +27,8 @@ class PaisController extends Controller
     
         Interaction::on('mongodb')->create([
             'user_id' => auth()->user()->id, 
-            'route' => '/paises',
-            'interaction_type' => 'GET',
+            'route' => $request->path(),
+            'interaction_type' => $request->method(),
             'interaction_query' => $lastQuery['query'],
             'interaction_date' => Carbon::now()->toDateString(),
             'interaction_time' => Carbon::now()->toTimeString(),
@@ -37,7 +37,7 @@ class PaisController extends Controller
         return response()->json($paises);
     }
 
-    public function show($id)
+    public function show(Request $request, $id)
     {
         DB::enableQueryLog();
 
@@ -48,9 +48,9 @@ class PaisController extends Controller
     
         Interaction::on('mongodb')->create([
             'user_id' => auth()->user()->id, 
-            'route' => '/paises',
-            'interaction_type' => 'GET',
-            'interaction_query' => $lastQuery['query'],
+            'route' => $request->path(),
+            'interaction_type' => $request->method(),
+            'interaction_query' => $pais,
             'interaction_date' => Carbon::now()->toDateString(),
             'interaction_time' => Carbon::now()->toTimeString(),
         ]);
@@ -73,9 +73,9 @@ class PaisController extends Controller
     
         Interaction::on('mongodb')->create([
             'user_id' => auth()->user()->id, 
-            'route' => '/paises/create',
-            'interaction_type' => 'POST',
-            'interaction_query' => $lastQuery['query'],
+            'route' => $request->path(),
+            'interaction_type' => $request->method(),
+            'interaction_query' => $pais,
             'interaction_date' => Carbon::now()->toDateString(),
             'interaction_time' => Carbon::now()->toTimeString(),
         ]);
@@ -99,9 +99,9 @@ class PaisController extends Controller
     
         Interaction::on('mongodb')->create([
             'user_id' => auth()->user()->id, 
-            'route' => '/paises/update/' . $id,
-            'interaction_type' => 'PUT',
-            'interaction_query' => $lastQuery['query'],
+            'route' => $request->path(),
+            'interaction_type' => $request->method(),
+            'interaction_query' => $pais,
             'interaction_date' => Carbon::now()->toDateString(),
             'interaction_time' => Carbon::now()->toTimeString(),
         ]);
@@ -109,23 +109,23 @@ class PaisController extends Controller
         return response()->json($pais, 200);
     }
 
-    public function delete($id)
+    public function delete(Request $request, $id)
     {
         DB::enableQueryLog();
-
-        Pais::findOrFail($id)->delete();
+        $pais = Pais::findOrFail($id);
 
         $queries = DB::getQueryLog();
         $lastQuery = end($queries);
     
         Interaction::on('mongodb')->create([
             'user_id' => auth()->user()->id, 
-            'route' => '/paises'. $id,
-            'interaction_type' => 'DELETE',
-            'interaction_query' => $lastQuery['query'],
+            'route' => $request->path(),
+            'interaction_type' => $request->method(),
+            'interaction_query' => $pais,
             'interaction_date' => Carbon::now()->toDateString(),
             'interaction_time' => Carbon::now()->toTimeString(),
         ]);
+        $pais->delete();
 
         return response()->json('Deleted Successfully', 200);
     }
