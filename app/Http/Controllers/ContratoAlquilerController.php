@@ -86,8 +86,8 @@ class ContratoAlquilerController extends Controller
     {
        try {
         $this->validate($request, [
-            'FechaInicio' => 'required|date',
-            'FechaFin' => 'required|date',
+            'Fecha_Inicio' => 'required|date',
+            'Fecha_Final' => 'required|date',
             'Monto' => 'required|numeric',
             'InquilinoID' => 'required|integer',
             'ApartamentoID' => 'required|integer',
