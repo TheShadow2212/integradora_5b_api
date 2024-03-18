@@ -102,6 +102,7 @@ Route::prefix('auth')->middleware(['JWTAuthenticate', 'roleAuth'])->group(functi
     Route::post('apartamentos', [ApartamentoController::class, 'create']) ->middleware('userAuth:1');
     Route::put('apartamentos/{id}', [ApartamentoController::class, 'update']) ->middleware('userAuth:1');
     Route::delete('apartamentos/{id}', [ApartamentoController::class, 'delete']) ->middleware('userAuth:1');
+    Route::get('apartamentosDisponibles', [ApartamentoController::class, 'apartamentosDisponibles'])->middleware('userAuth:1');
 
     //Rutas para el recurso contratoAlquiler - CRUD
     Route::get('contratoAlquilers', [ContratoAlquilerController::class, 'index']) ->middleware('userAuth:1,2,3');

@@ -95,10 +95,10 @@ class InquilinoController extends Controller
         return response()->json($inquilino, 200);
     }
 
-    public function delete($id)
+    public function delete(Request $request, $id)
     {
         $inquilino = Inquilino::findOrFail($id);
-
+    
         Interaction::on('mongodb')->create([
             'user_id' => auth()->user()->id, 
             'route' => $request->path(),
@@ -107,9 +107,9 @@ class InquilinoController extends Controller
             'interaction_date' => Carbon::now()->toDateString(),
             'interaction_time' => Carbon::now()->toTimeString(),
         ]);
-
+    
         $inquilino->delete();
-
+    
         return response()->json('Deleted Successfully', 200);
     }
 }

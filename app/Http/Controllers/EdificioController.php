@@ -88,7 +88,7 @@ class EdificioController extends Controller
         return response()->json($edificio, 200);
     }
 
-    public function delete($id)
+    public function delete(Request $request, $id)
     {
         $edificio = Edificio::findOrFail($id);
 

@@ -112,7 +112,7 @@ class ContratoAlquilerController extends Controller
        }
     }
 
-    public function delete($id)
+    public function delete(Request $request, $id)
     {
         $contratoAlquiler = ContratoAlquiler::findOrFail($id);
 

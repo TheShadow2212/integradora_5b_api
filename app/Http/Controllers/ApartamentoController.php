@@ -93,7 +93,7 @@ class ApartamentoController extends Controller
         return response()->json($apartamento, 200);
     }
 
-    public function delete($id)
+    public function delete(Request $request, $id)
     {
         $apartamento = Apartamento::findOrFail($id);
 
@@ -109,5 +109,21 @@ class ApartamentoController extends Controller
         $apartamento->delete();
 
         return response()->json('Deleted Successfully', 200);
+    }
+
+    public function apartamentosDisponibles(Request $request)
+    {
+        $apartamentos = Apartamento::where('Estado', 1)->get()->map(function ($apartamentos) {
+            $edificio = Edificio::find($apartamentos->EdificioID);
+            return [
+                'id' => $apartamentos -> ApartamentoID,
+                'Nombre' =>$apartamentos -> Nombre,
+                'Edificio' =>$edificio -> Nombre,
+                'Descripcion' =>$apartamentos -> Descripcion,
+                'Estado' =>$apartamentos -> Estado
+            ];
+        });
+
+        return response()->json($apartamentos);
     }
 }
