@@ -22,7 +22,7 @@ class UserController extends Controller
         $usuarios = User::all();
 
         $queries = DB::getQueryLog();
-        $lastQuery = end($queries);
+        $lastQuery = $queries[0];
 
         $usuarios = $usuarios->map(function ($usuarios) {
             $rol = Role::find($usuarios->role_id);

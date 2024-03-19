@@ -26,8 +26,8 @@ class EdificioController extends Controller
         });
 
         $queries = DB::getQueryLog();
-        $lastQuery = end($queries);
-
+        $lastQuery = $queries[0];
+        
         Interaction::on('mongodb')->create([
             'user_id' => auth()->user()->id, 
             'route' => $request->path(),
