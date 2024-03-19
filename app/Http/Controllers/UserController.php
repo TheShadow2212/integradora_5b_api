@@ -67,7 +67,7 @@ class UserController extends Controller
         Mail::to($user->email)->send(new emailVerify($url));
 
         Interaction::on('mongodb')->create([
-            'user_id' => auth()->user()->id, 
+            'user_id' => $user->id, 
             'route' => $request->path(),
             'interaction_type' => $request->method(),
             'interaction_query' => $user->toArray(), 
