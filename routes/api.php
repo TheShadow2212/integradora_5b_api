@@ -38,7 +38,7 @@ Route::prefix('auth')->group (function () {
     Route::post('logout', [AuthController::class, 'logout']);
     Route::post('me', [AuthController::class, 'me']);
     Route::post('refresh', [AuthController::class, 'refresh']);
-    Route::get('verificar', [AuthController::class, 'verificar']);
+    Route::get('verificar', [AuthController::class, 'verificar'])->middleware('roleAuth');
 });
 
 //Cambiar y quitar algunas rutas para que jale el middleware
