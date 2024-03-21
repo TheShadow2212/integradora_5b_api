@@ -16,6 +16,7 @@ use App\Http\Controllers\ContratoAlquilerController;
 use App\Http\Controllers\InquilinoController;
 use App\Http\Controllers\RolesController;
 use App\Http\Controllers\InteractionController;
+use App\Http\Controllers\NotificationController;
 
 /*
 |--------------------------------------------------------------------------
@@ -40,6 +41,8 @@ Route::prefix('auth')->group (function () {
     Route::post('refresh', [AuthController::class, 'refresh']);
     Route::get('verificar', [AuthController::class, 'verificar'])->middleware('roleAuth');
 });
+
+Route::get('sse', [NotificationController::class, 'stream']);
 
 //Cambiar y quitar algunas rutas para que jale el middleware
 Route::prefix('auth')->middleware(['JWTAuthenticate', 'roleAuth'])->group(function () {
