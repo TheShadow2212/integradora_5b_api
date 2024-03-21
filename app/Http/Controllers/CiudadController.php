@@ -9,6 +9,7 @@ use Illuminate\Http\Request;
 use App\Models\Interaction;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
+use App\Events\nuevaCiudad;
 
 class CiudadController extends Controller
 {
@@ -53,8 +54,9 @@ class CiudadController extends Controller
             'RegionID' => 'required|integer',
         ]);
 
+        event(new nuevaCiudad);
         $ciudad = Ciudad::create($request->all());
-
+        
         Interaction::on('mongodb')->create([
             'user_id' => auth()->user()->id, 
             'route' => $request->path(),
