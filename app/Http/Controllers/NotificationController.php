@@ -33,7 +33,7 @@ class NotificationController extends Controller
                 flush();
             }
     
-            sleep(5);
+            sleep(1);
         }
     }
 }
