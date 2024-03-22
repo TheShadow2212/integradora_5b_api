@@ -9,6 +9,10 @@ use Illuminate\Http\Request;
 use App\Models\Interaction;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
+use App\Http\Controllers\NotificationController;
+use App\Events\RegionUpdated;
+use Illuminate\Support\Facades\Cache;
+
 
 class RegionController extends Controller
 {
@@ -63,6 +67,12 @@ class RegionController extends Controller
             'interaction_time' => Carbon::now()->toTimeString(),
         ]);
 
+
+        event(new RegionUpdated());
+
+        Cache::put('RegionUpdated', true, 15);
+
+
         return response()->json($region, 201);
     }
 
@@ -85,6 +95,10 @@ class RegionController extends Controller
             'interaction_time' => Carbon::now()->toTimeString(),
         ]);
 
+        event(new RegionUpdated());
+
+        Cache::put('RegionUpdated', true, 15);
+
         return response()->json($region, 200);
     }
 
@@ -103,6 +117,11 @@ class RegionController extends Controller
         ]);
 
         $region->delete();
+
+        event(new RegionUpdated());
+
+        Cache::put('RegionUpdated', true, 15);
+
 
         return response()->json('Deleted Successfully', 200);
     }
