@@ -16,7 +16,10 @@ class NotificationController extends Controller
         header('Connection: keep-alive');
         header('X-Accel-Buffering: no');
         header('Access-Control-Allow-Origin: http://192.168.100.84:8000');
+        header('Access-Control-Allow-Origin: http://192.168.123.104:8000');
         header('Access-Control-Allow-Origin: http://192.168.100.84:4200');
+        header('Access-Control-Allow-Origin: http://192.168.123.104:4200');
+
 
         if(Cache::has('RegionUpdated')) {
 
