@@ -13,30 +13,17 @@ class InquilinoController extends Controller
 {
     public function index(Request $request)
     {
-        DB::enableQueryLog();
 
         $inquilinos = Inquilino::all()->map(function ($inquilinos) {
             return [
-                'id' => $inquilinos -> InquilinoID,
-                'Nombre' =>$inquilinos -> Nombre,
-                'Apellido' =>$inquilinos -> Apellido,
-                'Cedula' =>$inquilinos -> Cedula,
-                'Telefono' =>$inquilinos -> Telefono,
-                'Email' =>$inquilinos -> Email
+                'id' => $inquilinos -> id,
+                'Nombre' =>$inquilinos -> nombre,
+                'Apellido' =>$inquilinos -> apellido,
+                'Cedula' =>$inquilinos -> cedula,
+                'Telefono' =>$inquilinos -> telefono,
+                'Email' =>$inquilinos -> email
             ];
         });
-
-        $queries = DB::getQueryLog();
-        $lastQuery = $queries[0];
-
-        Interaction::on('mongodb')->create([
-            'user_id' => auth()->user()->id, 
-            'route' => $request->path(),
-            'interaction_type' => $request->method(),
-            'interaction_query' => $lastQuery['query'],
-            'interaction_date' => Carbon::now()->toDateString(),
-            'interaction_time' => Carbon::now()->toTimeString(),
-        ]);
 
         return response()->json($inquilinos);
     }
@@ -58,15 +45,6 @@ class InquilinoController extends Controller
 
         $inquilino = Inquilino::create($request->all());
 
-        Interaction::on('mongodb')->create([
-            'user_id' => auth()->user()->id, 
-            'route' => $request->path(),
-            'interaction_type' => $request->method(),
-            'interaction_query' => $inquilino->toArray(), 
-            'interaction_date' => Carbon::now()->toDateString(),
-            'interaction_time' => Carbon::now()->toTimeString(),
-        ]);
-
         return response()->json($inquilino, 201);
     }
 
@@ -83,30 +61,12 @@ class InquilinoController extends Controller
         $inquilino = Inquilino::findOrFail($id);
         $inquilino->update($request->all());
 
-        Interaction::on('mongodb')->create([
-            'user_id' => auth()->user()->id, 
-            'route' => $request->path(),
-            'interaction_type' => $request->method(),
-            'interaction_query' => $inquilino->toArray(), 
-            'interaction_date' => Carbon::now()->toDateString(),
-            'interaction_time' => Carbon::now()->toTimeString(),
-        ]);
-
         return response()->json($inquilino, 200);
     }
 
     public function delete(Request $request, $id)
     {
         $inquilino = Inquilino::findOrFail($id);
-    
-        Interaction::on('mongodb')->create([
-            'user_id' => auth()->user()->id, 
-            'route' => $request->path(),
-            'interaction_type' =>$request->method(),
-            'interaction_query' => $inquilino->toArray(), 
-            'interaction_date' => Carbon::now()->toDateString(),
-            'interaction_time' => Carbon::now()->toTimeString(),
-        ]);
     
         $inquilino->delete();
     

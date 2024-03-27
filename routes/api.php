@@ -4,7 +4,11 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\UserController;
-use App\Http\Controllers\PaisController;
+use App\Http\Controllers\RolesController;
+use App\Http\Controllers\HabitacionController;
+use App\Http\Controllers\InquilinoController;
+
+/*use App\Http\Controllers\PaisController;
 use App\Http\Controllers\RegionController;
 use App\Http\Controllers\CiudadController;
 use App\Http\Controllers\DistritoController;
@@ -13,21 +17,10 @@ use App\Http\Controllers\CalleController;
 use App\Http\Controllers\EdificioController;
 use App\Http\Controllers\ApartamentoController;
 use App\Http\Controllers\ContratoAlquilerController;
-use App\Http\Controllers\InquilinoController;
-use App\Http\Controllers\RolesController;
 use App\Http\Controllers\InteractionController;
 use App\Http\Controllers\NotificationController;
+ */
 
-/*
-|--------------------------------------------------------------------------
-| API Routes
-|--------------------------------------------------------------------------
-|
-| Here is where you can register API routes for your application. These
-| routes are loaded by the RouteServiceProvider and all of them will
-| be assigned to the "api" middleware group. Make something great!
-|
-*/
 
 
 Route::post('user/register', [UserController::class, 'create']); 
@@ -42,12 +35,8 @@ Route::prefix('auth')->group (function () {
     Route::get('verificar', [AuthController::class, 'verificar'])->middleware('roleAuth');
 });
 
-Route::get('sse', [NotificationController::class, 'stream']);
-
 //Cambiar y quitar algunas rutas para que jale el middleware
 Route::prefix('auth')->middleware(['JWTAuthenticate', 'roleAuth'])->group(function () {
-
-
 
     //Rutas para el recurso inquilino - CRUD
     Route::get('inquilinos', [InquilinoController::class, 'index']) ->middleware('userAuth:1,2,3');
@@ -55,13 +44,20 @@ Route::prefix('auth')->middleware(['JWTAuthenticate', 'roleAuth'])->group(functi
     Route::post('inquilinos', [InquilinoController::class, 'create']) ->middleware('userAuth:1');
     Route::put('inquilinos/{id}', [InquilinoController::class, 'update']) ->middleware('userAuth:1');
     Route::delete('inquilinos/{id}', [InquilinoController::class, 'delete']) ->middleware('userAuth:1');
-
+    
     //Rutas para el recurso usuario - CRUD
     Route::get('usuarios', [UserController::class, 'index'])->middleware('userAuth:1');
     Route::get('usuarios/{id}', [UserController::class, 'show'])->middleware('userAuth:1');
     Route::post('usuarios', [UserController::class, 'create']) ->middleware('userAuth:1');
     Route::put('usuarios/{id}', [UserController::class, 'update']) ->middleware('userAuth:1');
     Route::delete('usuarios/{id}', [UserController::class, 'delete']) ->middleware('userAuth:1');
+
+    //Rutas para el recurso habitacion - CRUD
+    Route::get('habitaciones', [HabitacionController::class, 'index']) ->middleware('userAuth:1,2,3');
+    Route::get('habitaciones/{id}', [HabitacionController::class, 'show']) ->middleware('userAuth:1,2,3');
+    Route::post('habitaciones', [HabitacionController::class, 'create']) ->middleware('userAuth:1');
+    Route::put('habitaciones/{id}', [HabitacionController::class, 'update']) ->middleware('userAuth:1');
+    Route::delete('habitaciones/{id}', [HabitacionController::class, 'delete']) ->middleware('userAuth:1');
     
 });
 

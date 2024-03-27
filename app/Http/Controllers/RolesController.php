@@ -22,15 +22,6 @@ class RolesController extends Controller
         
         $queries = DB::getQueryLog();
         $lastQuery = $queries[0];
-
-        Interaction::on('mongodb')->create([
-            'user_id' => auth()->user()->id, 
-            'route' => $request->path(),
-            'interaction_type' => $request->method(),
-            'interaction_query' => $lastQuery['query'],
-            'interaction_date' => Carbon::now()->toDateString(),
-            'interaction_time' => Carbon::now()->toTimeString(),
-        ]);
         
         return response()->json($roles);
     }

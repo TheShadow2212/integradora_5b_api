@@ -17,12 +17,9 @@ class UserController extends Controller
 {
     public function index(Request $request)
     {
-        DB::enableQueryLog();
 
         $usuarios = User::all();
 
-        $queries = DB::getQueryLog();
-        $lastQuery = $queries[0];
 
         $usuarios = $usuarios->map(function ($usuarios) {
             $rol = Role::find($usuarios->role_id);
@@ -33,17 +30,6 @@ class UserController extends Controller
                 'Rol' =>$rol -> name,
             ];
         });
-
-
-        Interaction::on('mongodb')->create([
-            'user_id' => auth()->user()->id, 
-            'route' => $request->path(),
-            'interaction_type' => $request->method(),
-            'interaction_query' => $lastQuery['query'],
-            'interaction_date' => Carbon::now()->toDateString(),
-            'interaction_time' => Carbon::now()->toTimeString(),
-        ]);
-
 
         return response()->json($usuarios);
     }
@@ -66,15 +52,6 @@ class UserController extends Controller
         $url = URL::signedRoute('verification.email', ['id' => $user->id]);
         Mail::to($user->email)->send(new emailVerify($url));
 
-        Interaction::on('mongodb')->create([
-            'user_id' => $user->id, 
-            'route' => $request->path(),
-            'interaction_type' => $request->method(),
-            'interaction_query' => $user->toArray(), 
-            'interaction_date' => Carbon::now()->toDateString(),
-            'interaction_time' => Carbon::now()->toTimeString(),
-        ]);
-    
         return response()->json($user, 201);
     }
 
@@ -94,30 +71,12 @@ class UserController extends Controller
         $user = User::findOrFail($id);
         $user->update($request->all());
 
-        Interaction::on('mongodb')->create([
-            'user_id' => auth()->user()->id, 
-            'route' => $request->path(),
-            'interaction_type' => $request->method(),
-            'interaction_query' => $user->toArray(), 
-            'interaction_date' => Carbon::now()->toDateString(),
-            'interaction_time' => Carbon::now()->toTimeString(),
-        ]);
-
         return response()->json($user, 200);
     }
 
     public function delete(Request $request,$id)
     {
         $user = User::findOrFail($id);
-
-        Interaction::on('mongodb')->create([
-            'user_id' => auth()->user()->id, 
-            'route' => $request->path(),
-            'interaction_type' => $request->method(),
-            'interaction_query' => $user->toArray(), 
-            'interaction_date' => Carbon::now()->toDateString(),
-            'interaction_time' => Carbon::now()->toTimeString(),
-        ]);
 
         $user->delete();
 

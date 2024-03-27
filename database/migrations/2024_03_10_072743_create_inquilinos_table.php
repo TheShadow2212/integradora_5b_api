@@ -12,12 +12,12 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('inquilinos', function (Blueprint $table) {
-            $table->id('InquilinoID');
-            $table->string('Nombre', 50);
-            $table->string('Apellido', 50);
-            $table->string('Cedula', 13);
-            $table->string('Telefono', 50);
-            $table->string('Email', 50);
+            $table->id();
+            $table->string('nombre', 50);
+            $table->string('apellido', 50);
+            $table->string('cedula', 13);
+            $table->string('telefono', 50);
+            $table->string('email', 50);
             $table->timestamps();
         });
     }
