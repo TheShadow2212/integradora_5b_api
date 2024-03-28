@@ -21,8 +21,6 @@ use App\Http\Controllers\InteractionController;
 use App\Http\Controllers\NotificationController;
  */
 
-
-
 Route::post('user/register', [UserController::class, 'create']); 
 Route::get('/verify-email/{id}', [AuthController::class, 'verifyEmail'])->name('verification.email');
 Route::post('autenticar', [AuthController::class, 'authenticate']);
@@ -47,7 +45,7 @@ Route::prefix('auth')->middleware(['JWTAuthenticate', 'roleAuth'])->group(functi
     
     //Rutas para el recurso usuario - CRUD
     Route::get('usuarios', [UserController::class, 'index'])->middleware('userAuth:1');
-    Route::get('usuarios/{id}', [UserController::class, 'show'])->middleware('userAuth:1');
+    Route::get('usuario/{id}', [UserController::class, 'show'])->middleware('userAuth:1');
     Route::post('usuarios', [UserController::class, 'create']) ->middleware('userAuth:1');
     Route::put('usuarios/{id}', [UserController::class, 'update']) ->middleware('userAuth:1');
     Route::delete('usuarios/{id}', [UserController::class, 'delete']) ->middleware('userAuth:1');

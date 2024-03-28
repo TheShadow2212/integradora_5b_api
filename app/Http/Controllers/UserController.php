@@ -34,6 +34,18 @@ class UserController extends Controller
         return response()->json($usuarios);
     }
 
+    public function show ($id)
+    {
+        $usuario = User::find($id);
+        $rol = Role::find($usuario->role_id);
+        return [
+            'id' => $usuario -> id,
+            'nombre' =>$usuario -> name,
+            'email' =>$usuario -> email,
+            'rol' =>$rol -> name,
+        ];
+    }
+
     public function create(Request $request)
     {
         $validatedData = $request->validate([
@@ -54,12 +66,7 @@ class UserController extends Controller
 
         return response()->json($user, 201);
     }
-
-    public function show($id)
-    {
-        return User::find($id);
-    }
-
+    
     public function update(Request $request, $id)
     {
         $this->validate($request, [

@@ -9,13 +9,13 @@ class Habitacion extends Model
 {
     use HasFactory;
     protected $table = 'habitaciones';
-    protected $primaryKey = 'HabitacionID';
-    protected $filleable = ['nombre','status','usuarioID'];
+    protected $primaryKey = 'id';
+    protected $filleable = ['nombre','status','usuario_id'];
     protected $hidden = ['updated_at', 'created_at'];
 
 
     public function usuario()
     {
-        return $this->belongsTo(Usuario::class, 'usuarioID');
+        return $this->belongsTo(Usuario::class, 'usuario_id');
     }
 }

@@ -11,12 +11,11 @@ class HabitacionController extends Controller
     public function index(Request $request)
     {
         $habitaciones = Habitacion::all()->map(function ($habitaciones) {
-            $usuario = User::find($habitaciones->usuarioID);
             return [
-                'id' => $habitaciones->HabitacionID,
+                'id' => $habitaciones->id,
                 'nombre' =>$habitaciones->nombre,
                 'status' =>$habitaciones->status,
-                'usuario' =>$usuario->nombre . ' (' . $usuario->email . ')',
+                'usuario' =>$habitaciones->usuario_id,
             ];
         });
     
@@ -27,12 +26,11 @@ class HabitacionController extends Controller
     {
         $habitacion = Habitacion::find($id);
         if ($habitacion) {
-            $usuario = User::find($habitacion->usuarioID);
             return response()->json([
-                'id' => $habitacion->HabitacionID,
+                'id' => $habitacion->id,
                 'nombre' => $habitacion->nombre,
                 'status' => $habitacion->status,
-                'usuario' => $usuario->nombre . ' (' . $usuario->email . ')',
+                'usuario' => $habitacion->usuario_id,
             ], 200); 
         } else {
             return response()->json(['error' => 'Habitación no encontrada'], 404); 
@@ -75,13 +73,16 @@ class HabitacionController extends Controller
     
     public function delete($id)
     {
-        $habitacion = Habitacion::find($id);
-    
-        if ($habitacion) {
+        $habitacion = Habitacion::findOrFail($id);
+
+        if($habitacion){
             $habitacion->delete();
-            return response()->json(null, 204); 
-        } else {
-            return response()->json(['error' => 'Habitación no encontrada'], 404); 
+
+            return response()->json('Deleted Successfully', 200);
         }
+        else{
+            return response()->json(['error' => 'Habitación no encontrada'], 404);
+        }
+    
     }
 }
