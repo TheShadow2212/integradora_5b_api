@@ -45,7 +45,7 @@ Route::prefix('auth')->middleware(['JWTAuthenticate', 'roleAuth'])->group(functi
     
     //Rutas para el recurso usuario - CRUD
     Route::get('usuarios', [UserController::class, 'index'])->middleware('userAuth:1');
-    Route::get('usuario/{id}', [UserController::class, 'show'])->middleware('userAuth:1');
+    Route::get('usuario', [UserController::class, 'show'])->middleware('userAuth:1,2,3');
     Route::post('usuarios', [UserController::class, 'create']) ->middleware('userAuth:1');
     Route::put('usuarios/{id}', [UserController::class, 'update']) ->middleware('userAuth:1');
     Route::delete('usuarios/{id}', [UserController::class, 'delete']) ->middleware('userAuth:1');

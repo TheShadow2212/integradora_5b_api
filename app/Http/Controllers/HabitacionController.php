@@ -10,7 +10,9 @@ class HabitacionController extends Controller
 {
     public function index(Request $request)
     {
-        $habitaciones = Habitacion::all()->map(function ($habitaciones) {
+        $usuario = $request->user();
+    
+        $habitaciones = Habitacion::where('usuario_id', $usuario->id)->get()->map(function ($habitaciones) {
             return [
                 'id' => $habitaciones->id,
                 'nombre' =>$habitaciones->nombre,

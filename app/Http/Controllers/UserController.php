@@ -34,15 +34,15 @@ class UserController extends Controller
         return response()->json($usuarios);
     }
 
-    public function show ($id)
+    public function show(Request $request)
     {
-        $usuario = User::find($id);
+        $usuario = $request->user();
         $rol = Role::find($usuario->role_id);
         return [
-            'id' => $usuario -> id,
-            'nombre' =>$usuario -> name,
-            'email' =>$usuario -> email,
-            'rol' =>$rol -> name,
+            'id' => $usuario->id,
+            'nombre' => $usuario->name,
+            'email' => $usuario->email,
+            'rol' => $rol->name,
         ];
     }
 
