@@ -44,7 +44,7 @@ class HabitacionController extends Controller
         $this->validate($request, [
             'nombre' => 'required|string|max:50',
             'status' => 'required|string|max:50',
-            'usuarioID' => 'required|string|max:50'
+            'usuario_id' => 'required|string|max:50'
         ]);
     
         $habitacion = Habitacion::create($request->all());
