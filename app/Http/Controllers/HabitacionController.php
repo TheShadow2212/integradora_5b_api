@@ -44,10 +44,14 @@ class HabitacionController extends Controller
         $this->validate($request, [
             'nombre' => 'required|string|max:50',
             'status' => 'required|string|max:50',
-            'usuario_id' => 'required|string|max:50'
         ]);
-    
-        $habitacion = Habitacion::create($request->all());
+
+        $usuario_id = auth()->id();
+        $habitacion = Habitacion::create([
+            'nombre' => $request->nombre,
+            'status' => $request->status,
+            'usuario_id' => $usuario_id,
+        ]);
     
         if ($habitacion) {
             return response()->json($habitacion, 201); 
@@ -61,12 +65,18 @@ class HabitacionController extends Controller
         $this->validate($request, [
             'nombre' => 'required|string|max:50',
             'status' => 'required|string|max:50',
-            'usuarioID' => 'required|string|max:50'
         ]);
-    
+
         $habitacion = Habitacion::find($id);
         if ($habitacion) {
-            $habitacion->update($request->all());
+            $usuario_id = auth()->id();
+
+            $habitacion->update([
+                'nombre' => $request->nombre,
+                'status' => $request->status,
+                'usuario_id' => $usuario_id,
+            ]);
+
             return response()->json($habitacion, 200); 
         } else {
             return response()->json(['error' => 'Habitación no encontrada'], 404); 
