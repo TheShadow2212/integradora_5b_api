@@ -46,6 +46,17 @@ class UserController extends Controller
         ];
     }
 
+    public function show_one(Request $request, $id)
+    {
+        $usuario = User::findOrFail($id);
+        return [
+            'id' => $usuario->id,
+            'name' => $usuario->name,
+            'email' => $usuario->email,
+            'role_id' => $usuario->role_id
+        ];
+    }
+
     public function create(Request $request)
     {
         $validatedData = $request->validate([

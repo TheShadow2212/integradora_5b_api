@@ -46,6 +46,7 @@ Route::prefix('auth')->middleware(['JWTAuthenticate', 'roleAuth'])->group(functi
     //Rutas para el recurso usuario - CRUD
     Route::get('usuarios', [UserController::class, 'index'])->middleware('userAuth:1');
     Route::get('usuario', [UserController::class, 'show'])->middleware('userAuth:1,2,3');
+    Route::get('usuarios/{id}', [UserController::class, 'show_one'])->middleware('userAuth:1');
     Route::post('usuarios', [UserController::class, 'create']) ->middleware('userAuth:1');
     Route::put('usuarios/{id}', [UserController::class, 'update']) ->middleware('userAuth:1');
     Route::delete('usuarios/{id}', [UserController::class, 'delete']) ->middleware('userAuth:1');
@@ -56,6 +57,9 @@ Route::prefix('auth')->middleware(['JWTAuthenticate', 'roleAuth'])->group(functi
     Route::post('habitaciones', [HabitacionController::class, 'create']) ->middleware('userAuth:1');
     Route::put('habitaciones/{id}', [HabitacionController::class, 'update']) ->middleware('userAuth:1');
     Route::delete('habitaciones/{id}', [HabitacionController::class, 'delete']) ->middleware('userAuth:1');
+
+    //Rutas para el recurso roles - CRUD
+    Route::get('roles', [RolesController::class, 'index']) ->middleware('userAuth:1,2,3');
     
 });
 
