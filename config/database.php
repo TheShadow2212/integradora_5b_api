@@ -39,7 +39,7 @@ return [
         'mongodb' => [
             'driver' => 'mongodb',
             'dsn' => env('DB_URI', 'mongodb+srv://Alejandro:2212@cluster0.6wybzch.mongodb.net/'),
-            'database' => 'Laravel',
+            'database' => 'Integradora',
         ],
 
         'sqlite' => [

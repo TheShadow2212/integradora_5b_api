@@ -7,19 +7,9 @@ use App\Http\Controllers\UserController;
 use App\Http\Controllers\RolesController;
 use App\Http\Controllers\HabitacionController;
 use App\Http\Controllers\InquilinoController;
-
-/*use App\Http\Controllers\PaisController;
-use App\Http\Controllers\RegionController;
-use App\Http\Controllers\CiudadController;
-use App\Http\Controllers\DistritoController;
-use App\Http\Controllers\BarrioController;
-use App\Http\Controllers\CalleController;
-use App\Http\Controllers\EdificioController;
-use App\Http\Controllers\ApartamentoController;
-use App\Http\Controllers\ContratoAlquilerController;
-use App\Http\Controllers\InteractionController;
 use App\Http\Controllers\NotificationController;
- */
+use App\Http\Controllers\SensorController;
+
 
 Route::post('user/register', [UserController::class, 'create']); 
 Route::get('/verify-email/{id}', [AuthController::class, 'verifyEmail'])->name('verification.email');
@@ -33,7 +23,6 @@ Route::prefix('auth')->group (function () {
     Route::get('verificar', [AuthController::class, 'verificar'])->middleware('roleAuth');
 });
 
-//Cambiar y quitar algunas rutas para que jale el middleware
 Route::prefix('auth')->middleware(['JWTAuthenticate', 'roleAuth'])->group(function () {
 
     //Rutas para el recurso inquilino - CRUD
@@ -60,6 +49,14 @@ Route::prefix('auth')->middleware(['JWTAuthenticate', 'roleAuth'])->group(functi
 
     //Rutas para el recurso roles - CRUD
     Route::get('roles', [RolesController::class, 'index']) ->middleware('userAuth:1,2,3');
+
+    //Rutas para el recurso notificaciones - CRUD
+    Route::get('notificaciones', [NotificationController::class, 'getHighNotifications']) ->middleware('userAuth:1,2');
+    Route::get('notificaciones/{id}', [NotificationController::class, 'getNotificationsByRoomId']) ->middleware('userAuth:1,2');
+    Route::put('notificaciones/{id}', [NotificationController::class, 'update']) ->middleware('userAuth:1,2');
+
+    //Rutas para el recurso sensores - CRUD
+    Route::get('sensores/{id}', [SensorController::class, 'getSensorsByRoomId']) ->middleware('userAuth:1,2');
     
 });
 

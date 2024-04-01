@@ -3,36 +3,45 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use Symfony\Component\HttpFoundation\StreamedResponse;
-use App\Events\RegionUpdated;
-use Illuminate\Support\Facades\Cache;
+use App\Models\Notification;
+use App\Models\Habitacion;
 
 class NotificationController extends Controller
 {
-    public function stream(Request $request)
+
+    public function getHighNotifications()
     {
-        header('Content-Type: text/event-stream');
-        header('Cache-Control: no-cache');
-        header('Connection: keep-alive');
-        header('X-Accel-Buffering: no');
-        header('Access-Control-Allow-Origin: http://192.168.100.84:8000');
-        header('Access-Control-Allow-Origin: http://192.168.123.104:8000');
-        header('Access-Control-Allow-Origin: http://192.168.100.84:4200');
-        header('Access-Control-Allow-Origin: http://192.168.123.104:4200');
+        $notifications = Notification::where('type', 'alta')->where('emergency', 0)->get()->map(function ($notification) {
+            $room = Habitacion::find($notification->room_id);
+            return [
+                'id' => $notification->id,
+                'room' => $room->nombre,
+                'data' => $notification->data,
+            ];
+        });
+        return response()->json($notifications);
+    }
+             
+    public function getNotificationsByRoomId($id)
+    {
+        $id = (int)$id;
 
+        $notifications = Notification::where('room_id', $id)->get()->map(function ($notification) {
+            return [
+                'id' => $notification->id,
+                'type' => $notification->type,
+                'data' => $notification->data,
+            ];
+        });
+        return response()->json($notifications);
+    }
 
-        if(Cache::has('RegionUpdated')) {
-
-            echo "data: " . json_encode(true) . "\n\n";
-            ob_flush();
-            flush();
-
-        }else{
-            echo "" . "\n\n";
-            ob_flush();
-            flush();
-        }
-
-        sleep(1);
+    public function update($id)
+    {
+        $id = (int)$id;
+    
+        $affectedRows = Notification::where('id', $id)->update(['emergency' => 1]);
+    
+        return response()->json(['affected_rows' => $affectedRows]);
     }
 }
