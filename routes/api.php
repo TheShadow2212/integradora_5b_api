@@ -10,6 +10,9 @@ use App\Http\Controllers\InquilinoController;
 use App\Http\Controllers\NotificationController;
 use App\Http\Controllers\SensorController;
 
+Route::post('sensores', [SensorController::class, 'create']);
+Route::post('notificaciones', [NotificationController::class, 'create']);
+
 
 Route::post('user/register', [UserController::class, 'create']); 
 Route::get('/verify-email/{id}', [AuthController::class, 'verifyEmail'])->name('verification.email');

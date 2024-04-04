@@ -9,6 +9,16 @@ use App\Models\User;
 
 class NotificationController extends Controller
 {
+    public function create(Request $request)
+    {
+        $notification = new Notification();
+        $notification->room_id = $request->room_id;
+        $notification->type = $request->type;
+        $notification->data = $request->data;
+        $notification->emergency = 0;
+        $notification->save();
+        return response()->json(['msg' => 'Registrado correctamente', 'notification' => $notification], 200);
+    }
 
     public function getHighNotifications(Request $request)
     {
@@ -17,7 +27,7 @@ class NotificationController extends Controller
             $room = Habitacion::find($notification->room_id);
             if ($room->usuario_id == $usuario->id) {
                 return [
-                    'id' => $notification->id,
+                    'id' => $notification->_id,
                     'room' => $room->nombre,
                     'data' => $notification->data,
                 ];
@@ -45,7 +55,6 @@ class NotificationController extends Controller
             $room = Habitacion::find($notification->room_id);
             if ($room->usuario_id == $usuario->id) {
                 return [
-                    'id' => $notification->id,
                     'type' => $notification->type,
                     'data' => $notification->data,
                 ];
@@ -62,10 +71,8 @@ class NotificationController extends Controller
     }
 
     public function update($id)
-    {
-        $id = (int)$id;
-    
-        $affectedRows = Notification::where('id', $id)->update(['emergency' => 1]);
+    {    
+        $affectedRows = Notification::where('_id', $id)->update(['emergency' => 1]);
     
         return response()->json(['affected_rows' => $affectedRows]);
     }

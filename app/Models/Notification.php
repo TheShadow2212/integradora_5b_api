@@ -7,10 +7,15 @@ use Jenssegers\Mongodb\Eloquent\Model;
 
 class Notification extends Model
 {
+    use HasFactory;
     protected $connection = 'mongodb';
     protected $collection = 'notificacion_data';
 
-    protected $fillable = ['id', 'room_id', 'type', 'data']; 
+    protected $fillable = ['_id', 'room_id', 'type', 'data','emergency']; 
 
-    use HasFactory;
+    public function __construct(array $attributes = [])
+    {
+        parent::__construct($attributes);
+        $this->timestamps = false;
+    }
 }

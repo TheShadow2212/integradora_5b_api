@@ -7,11 +7,15 @@ use Jenssegers\Mongodb\Eloquent\Model;
 
 class Sensor extends Model
 {
+    use HasFactory;
     protected $connection = 'mongodb';
     protected $collection = 'sensor_data';
 
-    protected $fillable = ['id', 'name', 'room_id', 'data']; 
+    protected $fillable = ['_id', 'name', 'data', 'room_id', 'date_time']; 
 
-
-    use HasFactory;
+    public function __construct(array $attributes = [])
+    {
+        parent::__construct($attributes);
+        $this->timestamps = false;
+    }
 }
