@@ -24,18 +24,26 @@ class HabitacionController extends Controller
         return response()->json($habitaciones, 200);
     }
 
-    public function show($id)
+    public function show(Request $request, $id)
     {
+        $usuario = $request->user();
         $habitacion = Habitacion::find($id);
-        if ($habitacion) {
-            return response()->json([
-                'id' => $habitacion->id,
-                'nombre' => $habitacion->nombre,
-                'status' => $habitacion->status,
-                'usuario' => $habitacion->usuario_id,
-            ], 200); 
-        } else {
-            return response()->json(['error' => 'Habitación no encontrada'], 404); 
+
+        if($habitacion->usuario_id == $usuario->id){
+            if ($habitacion) {
+                return response()->json([
+                    'id' => $habitacion->id,
+                    'nombre' => $habitacion->nombre,
+                    'status' => $habitacion->status,
+                    'usuario' => $habitacion->usuario_id,
+                ], 200); 
+            } else {
+                return response()->json(['error' => 'Habitación no encontrada'], 404); 
+            }
+        }
+        else
+        {
+            return response()->json(['error' => 'Habitación no accesible'], 403); 
         }
     }
 
