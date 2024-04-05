@@ -25,25 +25,31 @@ class SensorController extends Controller
     public function getSensorsByRoomId(Request $request, $id)
     {
         $usuario = $request->user();
-        $id = (int)$id;
-
-        $sensors = Sensor::where('room_id', $id)->get()->map(function($sensor) use ($usuario) {
-            $room = Habitacion::find($sensor->room_id);
-            if ($room->usuario_id == $usuario->id)
-            {
-                return [
-                    'name' => $sensor->name,
-                    'data' => $sensor->data,
-                ];
-            }
-        });
-
+        
+        $sensors = Sensor::where('room_id', $id)
+            ->orderBy('date_time', 'desc')
+            ->get()
+            ->groupBy('name')
+            ->map(function($group) {
+                return $group->first();
+            })
+            ->map(function($sensor) use ($usuario) {
+                $room = Habitacion::find($sensor->room_id);
+                if ($room->usuario_id == $usuario->id)
+                {
+                    return [
+                        'name' => $sensor->name,
+                        'data' => $sensor->data,
+                    ];
+                }
+            });
+    
         $sensors = $sensors->filter()->values();
-
+    
         if ($sensors->isEmpty()) {
             return response()->json([]);
         }
-
+    
         return response()->json($sensors);
     }
 }
