@@ -13,7 +13,7 @@ Para instalar y ejecutar este proyecto, sigue los siguientes pasos:
 3. Instala las dependencias del proyecto con el siguiente comando:
 
     ```bash
-    npm install
+    composer install
     ```
 
 4. Instala un entorno virtual. En este ejemplo, usaremos XAMPP versión 8.1.25.

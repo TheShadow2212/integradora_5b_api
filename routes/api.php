@@ -10,8 +10,7 @@ use App\Http\Controllers\InquilinoController;
 use App\Http\Controllers\NotificationController;
 use App\Http\Controllers\SensorController;
 
-Route::post('sensores', [SensorController::class, 'create']);
-Route::post('notificaciones', [NotificationController::class, 'create']);
+
 
 
 Route::post('user/register', [UserController::class, 'create']); 
@@ -57,9 +56,11 @@ Route::prefix('auth')->middleware(['JWTAuthenticate', 'roleAuth'])->group(functi
     Route::get('notificaciones', [NotificationController::class, 'getHighNotifications']) ->middleware('userAuth:1,2');
     Route::get('notificaciones/{id}', [NotificationController::class, 'getNotificationsByRoomId']) ->middleware('userAuth:1,2');
     Route::put('notificaciones/{id}', [NotificationController::class, 'update']) ->middleware('userAuth:1,2');
+    Route::post('notificaciones', [NotificationController::class, 'create']) ->middleware('userAuth:1,2');       
 
     //Rutas para el recurso sensores - CRUD
     Route::get('sensores/{id}', [SensorController::class, 'getSensorsByRoomId']) ->middleware('userAuth:1,2');
+    Route::post('sensores', [SensorController::class, 'create']) ->middleware('userAuth:1,2');
     
 });
 
