@@ -29,7 +29,6 @@ class AuthController extends Controller
     
         $user = User::findOrFail($id);
         $user->email_verified_at = now();
-        $user->role_id = 2;
         $user->save();
     
         return view('emailVerified');
@@ -43,6 +42,12 @@ class AuthController extends Controller
     public function login()
     {
         $credentials = request(['email', 'password']);
+
+        $user = User::where('email', $credentials['email'])->first();
+
+        if ($user && ! $user->hasVerifiedEmail()) {
+            return response()->json(['error' => 'Email not verified'], 401);
+        }
 
         if (! $token = auth()->attempt($credentials)) {
             return response()->json(['error' => 'Unauthorized'], 401);

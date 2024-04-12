@@ -69,7 +69,7 @@ class UserController extends Controller
         $user->name = $validatedData['name'];
         $user->email = $validatedData['email'];
         $user->password = Hash::make($validatedData['password']);
-        $user->role_id = 3;
+        $user->role_id = 2;
         $user->save();
 
         $url = URL::signedRoute('verification.email', ['id' => $user->id]);

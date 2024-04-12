@@ -21,7 +21,6 @@ return new class extends Migration
             array(
                 ['name' => 'administrador'],
                 ['name' => 'usuario'],
-                ['name' => 'invitado']
             )
         );
     }
