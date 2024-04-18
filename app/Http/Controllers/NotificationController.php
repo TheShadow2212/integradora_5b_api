@@ -13,7 +13,7 @@ class NotificationController extends Controller
     public function create(Request $request)
     {
         $notification = new Notification();
-        $notification->room_id = $request->room_id;
+        $notification->room_id = intval($request->room_id);
         $notification->type = $request->type;
         $notification->data = $request->data;
         $notification->emergency = 0;
