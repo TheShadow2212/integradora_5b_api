@@ -52,7 +52,12 @@ class NotificationController extends Controller
     {
         $id = (int)$id;
         $usuario = $request->user();
-        
+    
+        $room = Habitacion::find($id);
+        if ($room === null) {
+            return response()->json(['error' => 'Habitación no encontrada'], 404);
+        }
+    
         $notifications = Notification::where('room_id', $id)->get()->map(function ($notification) use ($usuario) {
             $room = Habitacion::find($notification->room_id);
             if ($room->usuario_id == $usuario->id) {
@@ -62,13 +67,13 @@ class NotificationController extends Controller
                 ];
             }
         });
-
+    
         $notifications = $notifications->filter()->values();
-
+    
         if ($notifications->isEmpty()) {
-            return response()->json([]);
+            return response()->json(['error' => 'Habitacion no accesible'], 403);
         }
-
+    
         return response()->json($notifications);
     }
 
