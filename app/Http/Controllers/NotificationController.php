@@ -52,26 +52,25 @@ class NotificationController extends Controller
     {
         $id = (int)$id;
         $usuario = $request->user();
-        
-        $notifications = Notification::where('room_id', $id)->get()->map(function ($notification) use ($usuario) {
-            $room = Habitacion::find($notification->room_id);
-            if ($room->usuario_id == $usuario->id) {
-                return [
-                    'type' => $notification->type,
-                    'data' => $notification->data,
-                ];
-            }
-        });
-
-        $notifications = $notifications->filter()->values();
-
-        if ($notifications->isEmpty()) {
-            return response()->json([]);
+    
+        $room = Habitacion::find($id);
+        if ($room === null) {
+            return response()->json(['error' => 'Habitación no encontrada'], 404);
         }
-
+    
+        if ($room->usuario_id != $usuario->id) {
+            return response()->json(['error' => 'Habitación no accesible'], 403);
+        }
+    
+        $notifications = Notification::where('room_id', $id)->get()->map(function ($notification) {
+            return [
+                'type' => $notification->type,
+                'data' => $notification->data,
+            ];
+        });
+    
         return response()->json($notifications);
     }
-
     public function update($id)
     {    
         $affectedRows = Notification::where('_id', $id)->update(['emergency' => 1]);
