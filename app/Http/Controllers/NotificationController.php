@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Models\Notification;
 use App\Models\Habitacion;
 use App\Models\User;
+use App\Events\CriticalNoti;
 
 class NotificationController extends Controller
 {
@@ -16,6 +17,10 @@ class NotificationController extends Controller
         $notification->type = $request->type;
         $notification->data = $request->data;
         $notification->emergency = 0;
+        //emergency solo en alta y emitir evento
+        if ($request->type == 'alta') {
+            event(new CriticalNoti($request->data));
+        }
         $notification->save();
         return response()->json(['msg' => 'Registrado correctamente', 'notification' => $notification], 200);
     }
@@ -42,10 +47,7 @@ class NotificationController extends Controller
     
         return response()->json($notifications);
     }
-    
-    
-    
-             
+           
     public function getNotificationsByRoomId(Request $request, $id)
     {
         $id = (int)$id;
