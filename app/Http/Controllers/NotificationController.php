@@ -30,7 +30,7 @@ class NotificationController extends Controller
         $usuario = $request->user();
         $notifications = Notification::where('type', 'alta')->where('emergency', 0)->get()->map(function ($notification) use ($usuario) {
             $room = Habitacion::find($notification->room_id);
-            if ($room->usuario_id == $usuario->id) {
+            if ($room && $room->usuario_id == $usuario->id) {
                 return [
                     'id' => $notification->_id,
                     'room' => $room->nombre,
@@ -38,13 +38,13 @@ class NotificationController extends Controller
                 ];
             }
         });
-    
+
         $notifications = $notifications->filter()->values();
-    
+
         if ($notifications->isEmpty()) {
             return response()->json([]);
         }
-    
+
         return response()->json($notifications);
     }
            

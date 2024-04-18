@@ -32,6 +32,6 @@ class CriticalNoti implements ShouldBroadcast
      */
     public function broadcastOn()
     {
-        return new PrivateChannel('channel-notifications');
+        return new Channel('channel-notifications');
     }
 }
