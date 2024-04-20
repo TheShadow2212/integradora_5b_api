@@ -36,6 +36,7 @@ class HabitacionController extends Controller
                     'nombre' => $habitacion->nombre,
                     'status' => $habitacion->status,
                     'usuario' => $habitacion->usuario_id,
+                    'alarma' => $habitacion->alarma,
                 ], 200); 
             } else {
                 return response()->json(['error' => 'Habitación no encontrada'], 404); 

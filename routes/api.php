@@ -61,6 +61,8 @@ Route::prefix('auth')->middleware(['JWTAuthenticate', 'roleAuth'])->group(functi
     //Rutas para el recurso sensores - CRUD
     Route::get('sensores/{id}', [SensorController::class, 'getSensorsByRoomId']) ->middleware('userAuth:1,2');
     Route::post('sensores', [SensorController::class, 'create']) ->middleware('userAuth:1,2');
+
+    Route::put('alarma/{id}', [SensorController::class, 'apagarAlarma']) ->middleware('userAuth:1,2');
     
 });
 

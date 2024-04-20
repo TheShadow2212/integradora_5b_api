@@ -21,6 +21,7 @@ return new class extends Migration
                 ->references('id')
                 ->on('users')
                 ->onDelete('cascade');
+            $table->boolean('alarma')->default(false);    
             $table->timestamps();
         });
     }

@@ -52,4 +52,10 @@ class SensorController extends Controller
     
         return response()->json($sensors);
     }
+
+    public function apagarAlarma($id) {
+        $habitacion = Habitacion::findOrFail($id);
+        $habitacion->alarma = false;
+        $habitacion->save();
+    }
 }

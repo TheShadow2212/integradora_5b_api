@@ -19,7 +19,7 @@ class NotificationController extends Controller
         $notification->emergency = 0;
         //emergency solo en alta y emitir evento
         // if ($request->type == 'alta') {
-            event(new CriticalNoti($request->data));
+            // event(new CriticalNoti($request->data));
         // }
         $notification->save();
         return response()->json(['msg' => 'Registrado correctamente', 'notification' => $notification], 200);
