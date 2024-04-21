@@ -5,7 +5,6 @@ namespace App\Http\Middleware;
 use Closure;
 use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Illuminate\Support\Facades\Auth;
 
 class UserAccessMiddleware
 {
@@ -17,7 +16,7 @@ class UserAccessMiddleware
      */ 
     public function handle(Request $request, Closure $next, ...$roles)
     {
-        $role = auth()->user()->role_id;
+        $role = intval($request->header('Role-Id'));
 
         $allowedRoles = array_map('intval', $roles);
 
