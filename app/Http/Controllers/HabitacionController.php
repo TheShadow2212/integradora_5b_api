@@ -8,6 +8,11 @@ use App\Models\User;
 
 class HabitacionController extends Controller
 {
+    public function all() {
+        $habitaciones = Habitacion::all();
+        return response()->json($habitaciones, 200);
+    }
+    
     public function index(Request $request)
     {
         $usuario = $request->user();
