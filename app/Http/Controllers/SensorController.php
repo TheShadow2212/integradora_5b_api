@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Models\Sensor;
 use App\Models\Habitacion;
 use App\Models\User;
+use App\Events\alarma;
 
 class SensorController extends Controller
 {
@@ -51,6 +52,14 @@ class SensorController extends Controller
         }
     
         return response()->json($sensors);
+    }
+
+    public function alarmaActiva($id) {
+        $habitacion = Habitacion::findOrFail($id);
+        $habitacion->alarma = true;
+        $habitacion->save();
+        event(new alarma);
+        return response()->json(['msg' => 'Alarma activada'], 200);
     }
 
     public function apagarAlarma($id) {
