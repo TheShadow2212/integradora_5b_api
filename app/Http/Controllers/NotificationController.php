@@ -17,7 +17,7 @@ class NotificationController extends Controller
         $notification->type = $request->type;
         $notification->data = $request->data;
         $notification->emergency = 0;
-        event(new CriticalNoti($request->data));
+        event(new CriticalNoti($request->data, $request->room_id));
         $notification->save();
         return response()->json(['msg' => 'Registrado correctamente', 'notification' => $notification], 200);
     }

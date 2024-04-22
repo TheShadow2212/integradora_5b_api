@@ -15,14 +15,16 @@ class CriticalNoti implements ShouldBroadcast
     use Dispatchable, InteractsWithSockets, SerializesModels;
 
     public $data;
+    public $room_id;
     /**
      * Create a new event instance.
      *
      * @return void
      */
-    public function __construct($data)
+    public function __construct($data, $room_id)
     {
         $this->data = $data;
+        $this->room_id = $room_id;
     }
 
     /**
