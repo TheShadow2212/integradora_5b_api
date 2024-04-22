@@ -69,8 +69,13 @@ class SensorController extends Controller
         $habitacion->save();
     }
 
-    public function estadoAlarma($id) {
-        $habitacion = Habitacion::findOrFail($id);
-        return response()->json($habitacion->alarma, 200);
+    public function estadoAlarma() {
+        $habitaciones = Habitacion::where('alarma', true)->pluck('id');
+    
+        if ($habitaciones->isEmpty()) {
+            return response()->json(false, 200);
+        }
+    
+        return response()->json(['status' => true, 'habitaciones' => $habitaciones], 200);
     }
 }
