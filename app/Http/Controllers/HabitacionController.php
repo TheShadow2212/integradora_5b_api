@@ -23,6 +23,7 @@ class HabitacionController extends Controller
                 'nombre' =>$habitaciones->nombre,
                 'status' =>$habitaciones->status,
                 'usuario' =>$habitaciones->usuario_id,
+                'alarma' =>$habitaciones->alarma,
             ];
         });
     
