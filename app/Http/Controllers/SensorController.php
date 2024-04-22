@@ -78,4 +78,31 @@ class SensorController extends Controller
     
         return response()->json(['status' => true, 'habitaciones' => $habitaciones], 200);
     }
+
+    public function getSensorByNameAndRoomId(Request $request, $id, $name)
+    {
+        $id = (int)$id;
+        $usuario = $request->user();
+
+        $room = Habitacion::find($id);
+        if ($room === null) {
+            return response()->json(['error' => 'Habitación no encontrada'], 404);
+        }
+
+        if ($room->usuario_id != $usuario->id) {
+            return response()->json(['error' => 'Habitación no accesible'], 403);
+        }
+        
+        $sensors = Sensor::where('room_id', $id)
+        ->where('name', $name)
+        ->orderBy('date_time', 'desc')
+        ->take(10)
+        ->get();
+
+        if ($sensors->isEmpty()) {
+            return response()->json(['error' => 'Sensor no encontrado'], 404);
+        }
+
+        return response()->json($sensors);
+    }
 }

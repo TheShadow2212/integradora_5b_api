@@ -25,7 +25,7 @@ Route::prefix('auth')->group (function () {
     Route::get('verificar', [AuthController::class, 'verificar'])->middleware('roleAuth');
 });
 
-Route::prefix('auth')->middleware(['JWTAuthenticate', 'roleAuth'])->group(function () {
+Route::prefix('auth')->middleware(['JWTAuthenticate'])->group(function () {
 
     //Rutas para el recurso inquilino - CRUD
     Route::get('inquilinos', [InquilinoController::class, 'index']) ->middleware('userAuth:1,2,3');
@@ -61,6 +61,7 @@ Route::prefix('auth')->middleware(['JWTAuthenticate', 'roleAuth'])->group(functi
 
     //Rutas para el recurso sensores - CRUD
     Route::get('sensores/{id}', [SensorController::class, 'getSensorsByRoomId']) ->middleware('userAuth:1,2');
+    Route::get('sensores/{id}/{name}', [SensorController::class, 'getSensorByNameAndRoomId']) ->middleware('userAuth:1,2');
     Route::post('sensores', [SensorController::class, 'create']) ->middleware('userAuth:1,2');
 
     Route::put('alarmaActiva/{id}', [SensorController::class, 'alarmaActiva']) ->middleware('userAuth:1,2');
