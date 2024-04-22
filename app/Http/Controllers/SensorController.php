@@ -73,7 +73,7 @@ class SensorController extends Controller
         $habitaciones = Habitacion::where('alarma', true)->pluck('id');
     
         if ($habitaciones->isEmpty()) {
-            return response()->json(false, 200);
+            return response()->json(['status' => false], 200);
         }
     
         return response()->json(['status' => true, 'habitaciones' => $habitaciones], 200);
