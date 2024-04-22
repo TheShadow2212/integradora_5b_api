@@ -16,7 +16,7 @@ class SensorController extends Controller
         $sensor = new Sensor();
         $sensor->name = $request->name;
         $sensor->data = $request->data;
-        $sensor->room_id = $request->room_id;
+        $sensor->room_id = intval($request->room_id);
         $sensor->date_time = \Carbon\Carbon::now()->toDateTimeString();
         $sensor->save();
         return response()->json(['msg' => 'Registrado correctamente', 'sensor' => $sensor], 200);
@@ -25,31 +25,32 @@ class SensorController extends Controller
 
     public function getSensorsByRoomId(Request $request, $id)
     {
+        $id = (int)$id;
         $usuario = $request->user();
+    
+        $room = Habitacion::find($id);
+        if ($room === null) {
+            return response()->json(['error' => 'Habitación no encontrada'], 404);
+        }
+    
+        if ($room->usuario_id != $usuario->id) {
+            return response()->json(['error' => 'Habitación no accesible'], 403);
+        }
         
         $sensors = Sensor::where('room_id', $id)
-            ->orderBy('date_time', 'desc')
-            ->get()
-            ->groupBy('name')
-            ->map(function($group) {
-                return $group->first();
-            })
-            ->map(function($sensor) use ($usuario) {
-                $room = Habitacion::find($sensor->room_id);
-                if ($room->usuario_id == $usuario->id)
-                {
-                    return [
-                        'name' => $sensor->name,
-                        'data' => $sensor->data,
-                    ];
-                }
-            });
-    
-        $sensors = $sensors->filter()->values();
-    
-        if ($sensors->isEmpty()) {
-            return response()->json([]);
-        }
+        ->orderBy('date_time', 'desc')
+        ->get()
+        ->groupBy('name')
+        ->map(function($group) {
+            return $group->first();
+        })
+        ->map(function($sensor) {
+            return [
+                'name' => $sensor->name,
+                'data' => is_numeric($sensor->data) ? round($sensor->data, 2) : $sensor->data,
+            ];
+        })
+        ->values();
     
         return response()->json($sensors);
     }
