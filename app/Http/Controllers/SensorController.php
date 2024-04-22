@@ -67,6 +67,7 @@ class SensorController extends Controller
         $habitacion = Habitacion::findOrFail($id);
         $habitacion->alarma = false;
         $habitacion->save();
+        return response()->json(['msg' => 'Apagada satisfactoriamente'], 200);
     }
 
     public function estadoAlarma() {
