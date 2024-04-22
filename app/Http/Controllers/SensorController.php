@@ -47,7 +47,7 @@ class SensorController extends Controller
         ->map(function($sensor) {
             return [
                 'name' => $sensor->name,
-                'data' => is_numeric($sensor->data) ? round($sensor->data, 2) : $sensor->data,
+                'data' => strval(is_numeric($sensor->data) ? round($sensor->data, 2) : $sensor->data),
             ];
         })
         ->values();
