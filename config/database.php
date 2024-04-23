@@ -38,7 +38,7 @@ return [
 
         'mongodb' => [
             'driver' => 'mongodb',
-            'dsn' => ('mongodb+srv://Alejandro:2212@cluster0.6wybzch.mongodb.net/'),
+            'dsn' => ('mongodb://3.145.19.75:27117'),
             'database' => 'Integradora',
         ],
 
