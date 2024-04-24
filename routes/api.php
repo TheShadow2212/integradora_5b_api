@@ -23,6 +23,7 @@ Route::prefix('auth')->group (function () {
     Route::post('me', [AuthController::class, 'me']);
     Route::post('refresh', [AuthController::class, 'refresh']);
     Route::get('verificar', [AuthController::class, 'verificar'])->middleware('roleAuth');
+    Route::get('habitacionesTodas', [HabitacionController::class, 'all']);
 });
 
 Route::prefix('auth')->middleware(['JWTAuthenticate'])->group(function () {
@@ -48,7 +49,7 @@ Route::prefix('auth')->middleware(['JWTAuthenticate'])->group(function () {
     Route::post('habitaciones', [HabitacionController::class, 'create']) ->middleware('userAuth:1,2');
     Route::put('habitaciones/{id}', [HabitacionController::class, 'update']) ->middleware('userAuth:1,2');
     Route::delete('habitaciones/{id}', [HabitacionController::class, 'delete']) ->middleware('userAuth:1,2');
-    Route::get('habitacionesTodas', [HabitacionController::class, 'all'])->middleware('userAuth:1,2,3');
+    
 
     //Rutas para el recurso roles - CRUD
     Route::get('roles', [RolesController::class, 'index']) ->middleware('userAuth:1,2,3');
