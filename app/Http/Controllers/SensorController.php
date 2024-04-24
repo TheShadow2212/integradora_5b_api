@@ -80,7 +80,7 @@ class SensorController extends Controller
         $habitacionesConAlarma = Habitacion::where('alarma', true)->pluck('id');
         $hayAlarmaDesactivada = Habitacion::where('alarma', false)->exists();
         
-        if ($habitaciones->isEmpty()) {
+        if ($habitacionesConAlarma->isEmpty()) {
             return response()->json([
                 'status' => false,
     'hola'=> "sadasdasdsa",
