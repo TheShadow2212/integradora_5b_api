@@ -72,15 +72,18 @@ class SensorController extends Controller
         
         $habitacionesConAlarma = Habitacion::where('alarma', true)->pluck('id');
         $hayAlarmaDesactivada = Habitacion::where('alarma', false)->exists();
-        if ($habitacionesConAlarma == [])
+        
+        if (empty($habitacionesConAlarma)) {
             return response()->json([
                 'status' => false,
                 'habitaciones' => $habitacionesConAlarma
             ], 200);
-        return response()->json([
-            'status' => $hayAlarmaDesactivada,
-            'habitaciones' => $habitacionesConAlarma
-        ], 200);
+        } else {
+            return response()->json([
+                'status' => $hayAlarmaDesactivada,
+                'habitaciones' => $habitacionesConAlarma
+            ], 200);
+        }
     }
 
     public function getSensorByNameAndRoomId(Request $request, $id, $name)
