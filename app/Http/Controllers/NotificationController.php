@@ -7,6 +7,7 @@ use App\Models\Notification;
 use App\Models\Habitacion;
 use App\Models\User;
 use App\Events\CriticalNoti;
+use App\Events\alarma;
 
 class NotificationController extends Controller
 {
@@ -30,7 +31,7 @@ class NotificationController extends Controller
 
     public function alarmaActiva() {
         Habitacion::query()->update(['alarma' => true]);
-        // event(new alarma('No hay'));
+        event(new alarma('No hay'));
         return response()->json(['msg' => 'Alarma activada en todas las habitaciones'], 200);
     }
 
