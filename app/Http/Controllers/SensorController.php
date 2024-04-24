@@ -76,11 +76,13 @@ class SensorController extends Controller
         if (empty($habitacionesConAlarma)) {
             return response()->json([
                 'status' => false,
+    'hola'=> "sadasdasdsa",
                 'habitaciones' => $habitacionesConAlarma
             ], 200);
         } else {
             return response()->json([
                 'status' => $hayAlarmaDesactivada,
+            'hola'=> $hayAlarmaDesactivada,
                 'habitaciones' => $habitacionesConAlarma
             ], 200);
         }
