@@ -24,7 +24,7 @@ class NotificationController extends Controller
             $notification->save();
         }
         $this->alarmaActiva();
-        // event(new CriticalNoti('Gas en la habitacion', 'No hay'));
+        event(new CriticalNoti('Gas en la habitacion', 'No hay'));
 
         return response()->json(['msg' => 'Registrado correctamente en todas las habitaciones'], 200);
     }
