@@ -7,12 +7,13 @@ use App\Models\Notification;
 use App\Models\Habitacion;
 use App\Models\User;
 use App\Events\CriticalNoti;
+use App\Events\alarma;
 
 class NotificationController extends Controller
 {
     public function create(Request $request)
     {
-        $rooms = Room::all();
+        $rooms = Habitacion::all();
 
         foreach ($rooms as $room) {
             $notification = new Notification();
@@ -20,11 +21,23 @@ class NotificationController extends Controller
             $notification->type = $request->type;
             $notification->data = $request->data;
             $notification->emergency = 0;
-            event(new CriticalNoti($request->data, $room->id));
             $notification->save();
         }
+        $this->alarmaActiva();
+        event(new CriticalNoti('Gas en la habitacion', 'No hay'));
 
         return response()->json(['msg' => 'Registrado correctamente en todas las habitaciones'], 200);
+    }
+
+    public function alarmaActiva() {
+        Habitacion::query()->update(['alarma' => true]);
+        event(new alarma('No hay'));
+        return response()->json(['msg' => 'Alarma activada en todas las habitaciones'], 200);
+    }
+
+    public function apagarAlarma() {
+        Habitacion::query()->update(['alarma' => false]);
+        return response()->json(['msg' => 'Alarma apagada en todas las habitaciones'], 200);
     }
 
     public function getHighNotifications(Request $request)

@@ -64,21 +64,25 @@ class SensorController extends Controller
     }
 
     public function apagarAlarma($id) {
-        $habitacion = Habitacion::findOrFail($id);
-        $habitacion->alarma = false;
-        $habitacion->save();
-        return response()->json(['msg' => 'Apagada satisfactoriamente'], 200);
+        Habitacion::query()->update(['alarma' => false]);
+        return response()->json(['msg' => 'Alarma apagada en todas las habitaciones'], 200);
     }
 
+<<<<<<< HEAD
     public function estadoAlarma() { 
         
         $habitacionesConAlarma = Habitacion::where('alarma', true)->pluck('id');
         $hayAlarmaDesactivada = Habitacion::where('alarma', false)->exists();
+=======
+    public function estadoAlarma() {
+        $habitaciones = Habitacion::where('alarma', true)->pluck('id');
+>>>>>>> b1d0b5290668233bdb67ec901ed21b56ce1bbe99
     
-        return response()->json([
-            'status' => $hayAlarmaDesactivada,
-            'habitaciones' => $habitacionesConAlarma
-        ], 200);
+        if ($habitaciones->isEmpty()) {
+            return response()->json(['status' => false], 200);
+        }
+    
+        return response()->json(['status' => true, 'habitaciones' => $habitaciones], 200);
     }
 
     public function getSensorByNameAndRoomId(Request $request, $id, $name)
