@@ -64,10 +64,8 @@ class SensorController extends Controller
     }
 
     public function apagarAlarma($id) {
-        $habitacion = Habitacion::findOrFail($id);
-        $habitacion->alarma = false;
-        $habitacion->save();
-        return response()->json(['msg' => 'Apagada satisfactoriamente'], 200);
+        Habitacion::query()->update(['alarma' => false]);
+        return response()->json(['msg' => 'Alarma apagada en todas las habitaciones'], 200);
     }
 
     public function estadoAlarma() {
