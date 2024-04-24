@@ -13,18 +13,13 @@ class SensorController extends Controller
 
     public function create(Request $request)
     {
-        $rooms = Room::all();
-    
-        foreach ($rooms as $room) {
-            $sensor = new Sensor();
-            $sensor->name = $request->name;
-            $sensor->data = $request->data;
-            $sensor->room_id = $room->id;
-            $sensor->date_time = \Carbon\Carbon::now()->toDateTimeString();
-            $sensor->save();
-        }
-    
-        return response()->json(['msg' => 'Registrado correctamente en todas las habitaciones'], 200);
+        $sensor = new Sensor();
+        $sensor->name = $request->name;
+        $sensor->data = $request->data;
+        $sensor->room_id = intval($request->room_id);
+        $sensor->date_time = \Carbon\Carbon::now()->toDateTimeString();
+        $sensor->save();
+        return response()->json(['msg' => 'Registrado correctamente', 'sensor' => $sensor], 200);
     }
 
 

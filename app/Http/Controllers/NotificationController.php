@@ -12,14 +12,19 @@ class NotificationController extends Controller
 {
     public function create(Request $request)
     {
-        $notification = new Notification();
-        $notification->room_id = intval($request->room_id);
-        $notification->type = $request->type;
-        $notification->data = $request->data;
-        $notification->emergency = 0;
-        event(new CriticalNoti($request->data, $request->room_id));
-        $notification->save();
-        return response()->json(['msg' => 'Registrado correctamente', 'notification' => $notification], 200);
+        $rooms = Room::all();
+
+        foreach ($rooms as $room) {
+            $notification = new Notification();
+            $notification->room_id = $room->id;
+            $notification->type = $request->type;
+            $notification->data = $request->data;
+            $notification->emergency = 0;
+            event(new CriticalNoti($request->data, $room->id));
+            $notification->save();
+        }
+
+        return response()->json(['msg' => 'Registrado correctamente en todas las habitaciones'], 200);
     }
 
     public function getHighNotifications(Request $request)
