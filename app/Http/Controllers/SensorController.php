@@ -70,7 +70,8 @@ class SensorController extends Controller
         return response()->json(['msg' => 'Apagada satisfactoriamente'], 200);
     }
 
-    public function estadoAlarma() {
+    public function estadoAlarma() { 
+        
         $habitacionesConAlarma = Habitacion::where('alarma', true)->pluck('id');
         $hayAlarmaDesactivada = Habitacion::where('alarma', false)->exists();
     
