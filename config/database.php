@@ -38,7 +38,7 @@ return [
 
         'mongodb' => [
             'driver' => 'mongodb',
-            'dsn' => ('mongodb://3.145.19.75:27117'),
+            'dsn' => ('mongodb://18.118.184.40:27117'),
             'database' => 'Integradora',
         ],
 
